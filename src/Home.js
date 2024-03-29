@@ -17,6 +17,11 @@ export default function Home() {
             View All Matches
           </button>
         </Link>
+        <Link to="rankings">
+          <button className="bg-primary-red text-white text-xl px-3 py-2 mb-2 rounded-full w-52 ml-1">
+            Current Rankings
+          </button>
+        </Link>
       </div>
     </section>
   );

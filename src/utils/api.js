@@ -1,5 +1,4 @@
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
+const API_BASE_URL = "http://localhost:5000/api";
 
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
@@ -17,7 +16,8 @@ async function fetchJson(url, options, onCancel) {
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
-    return payload.data;
+    return payload;
+
   } catch (error) {
     if (error.name !== "AbortError") {
       console.error(error.stack);
@@ -44,4 +44,10 @@ export async function createGame(data, signal) {
     { headers, signal, method: "POST", body: JSON.stringify({ data }) },
     []
   );
+}
+
+export async function fetchRankings(signal) {
+  const url = `${API_BASE_URL}/players`;
+  let data = await fetchJson(url, { headers, signal, method: "GET" }, []);
+  return data;
 }
