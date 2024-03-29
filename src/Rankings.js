@@ -109,11 +109,20 @@ export default function Rankings() {
       const formattedName = nameParts.join(" ");
       return (
         <li key={index} className="my-2 text-center">
-          <b className="text-xl">{formattedName.toUpperCase()}</b>
+          <b className="text-2xl">{formattedName.toUpperCase()}</b>
           <br />
-          STATE RANK: {player.stateRank}
-          <br />
-          WORLD RANK: {player.worldRank}
+          {player.stateRank ? (
+            <div>
+              <span>NORTH CAROLINA RANK: <b className="text-xl">{player.stateRank}</b></span>
+              <br />
+            </div>
+          ) : null}
+          {player.worldRank ? (
+            <div>
+              <span>WORLD RANK: <b className="text-xl">{player.worldRank}</b></span>
+              <br />
+            </div>
+          ) : null}
           <hr className="my-2" />
         </li>
       );
