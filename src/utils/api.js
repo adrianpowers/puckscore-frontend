@@ -17,7 +17,6 @@ async function fetchJson(url, options, onCancel) {
       return Promise.reject({ message: payload.error });
     }
     return payload;
-
   } catch (error) {
     if (error.name !== "AbortError") {
       console.error(error.stack);
@@ -27,7 +26,6 @@ async function fetchJson(url, options, onCancel) {
   }
 }
 
-// Function to generate a unique ID
 export function generateUniqueId() {
   // Generate a random number and convert it to a hexadecimal string
   const randomNumber = Math.floor(Math.random() * Date.now()).toString(16);
@@ -51,3 +49,22 @@ export async function fetchRankings(signal) {
   let data = await fetchJson(url, { headers, signal, method: "GET" }, []);
   return data;
 }
+
+export async function searchPlayersByName(name) {
+  try {
+    const response = await fetchJson(`${API_BASE_URL}/players/${name}`);
+    return response.sort((a, b) => {
+      if (a.stateRank === null && b.stateRank === null) {
+        return 0;
+      } else if (a.stateRank === null) {
+        return 1;
+      } else if (b.stateRank === null) {
+        return -1;
+      }
+      return a.stateRank - b.stateRank;
+    })
+  } catch (error) {
+    console.error("Error searching players by name:", error);
+    throw error;
+  }
+};
