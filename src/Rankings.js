@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import HomeButton from "./utils/HomeButton"; 
 import { fetchRankings } from "./utils/api";
 import "./index.css";
 
@@ -8,13 +8,6 @@ export default function Rankings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isVertical, setIsVertical] = useState(false);
-  const homeButton = (
-    <Link to="/">
-      <button className="bg-primary-red text-white text-xl px-3 py-2 mb-2 rounded-full w-40 mr-1">
-        Home
-      </button>
-    </Link>
-  );
 
   useEffect(() => {
     const ac = new AbortController();
@@ -66,7 +59,7 @@ export default function Rankings() {
         <h2 className="text-xl text-white mb-5">
           Please rotate your phone to view the current rankings!
         </h2>
-        {homeButton}
+        {HomeButton}
       </div>
     );
   }
@@ -134,11 +127,11 @@ export default function Rankings() {
       <h1 className="text-4xl font-bold text-center text-white m-6">
         Current Rankings
       </h1>
-      <div className="flex justify-center">{homeButton}</div>
+      <div className="flex justify-center">{<HomeButton />}</div>
       <div className="flex justify-center mx-6 p-2 border-red-500">
         <ul className="text-white">{rankingsList}</ul>
       </div>
-      <div className="flex justify-center">{homeButton}</div>
+      <div className="flex justify-center">{<HomeButton />}</div>
     </section>
   );
 }

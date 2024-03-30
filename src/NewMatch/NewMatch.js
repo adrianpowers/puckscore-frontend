@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NewMatchForm from "./NewMatchForm"; // Assuming you have a separate component for the form
+import NewMatchForm from "./NewMatchForm"; 
 import { createMatch, generateUniqueId, searchPlayersByName } from "../utils/api";
 import "../index.css";
 

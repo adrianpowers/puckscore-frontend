@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import HomeButton from "../utils/HomeButton.js"; // Importing the HomeButton component using relative path
 
 export default function NewMatchForm({
   newMatch,
@@ -264,13 +265,14 @@ export default function NewMatchForm({
         </div>
       </fieldset>
 
-      <div className="col-span-2 mt-10 flex justify-center">
+      <div className="flex flex-col items-center col-span-2 mt-6 gap-y-2">
         <button
           type="submit"
           className="bg-primary-yellow text-black text-xl font-bold py-5 w-[90%] rounded"
         >
           Create New Match
         </button>
+        <HomeButton />
       </div>
     </form>
   );
