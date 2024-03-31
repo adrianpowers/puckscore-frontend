@@ -94,12 +94,17 @@ export default function Rankings() {
       return a.stateRank - b.stateRank;
     })
     .map((player, index) => {
-      const nameParts = player.name.split(" ");
-      if (player.callsign) {
-        // Insert callsign between the first and last name
-        nameParts.splice(1, 0, `"${player.callsign}"`);
+      const firstName = player.name.firstName;
+      const callsign = player.name.callsign || null;
+      const lastName = player.name.lastName;
+      let formattedName = "";
+
+      if (callsign) {
+        formattedName = `${firstName} "${callsign}" ${lastName}`;
+      } else {
+        formattedName = `${firstName} ${lastName}`
       }
-      const formattedName = nameParts.join(" ");
+
       return (
         <li key={index} className="my-2 text-center">
           <b className="text-2xl">{formattedName.toUpperCase()}</b>

@@ -78,18 +78,17 @@ export default function NewMatchForm({
                       className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
                       onClick={() =>
                         handlePlayerSelect(
-                          result.name,
+                          result.name.firstName,
+                          result.name.lastName,
                           result.stateRank,
                           result.worldRank,
                           true
                         )
                       }
                     >
-                      {result.callsign
-                        ? `${result.name.split(" ")[0]} "${result.callsign}" ${
-                            result.name.split(" ")[1]
-                          }`
-                        : result.name}
+                      {result.name.callsign
+                        ? `${result.name.firstName} "${result.name.callsign}" ${result.name.lastName}`
+                        : `${result.name.firstName} ${result.name.lastName}`}
                     </div>
                   ))}
                 </div>
@@ -99,10 +98,7 @@ export default function NewMatchForm({
 
           <div className="flex justify-center w-full gap-x-3">
             <div>
-              <label
-                htmlFor="challenger_state_rank"
-                className="text-white"
-              >
+              <label htmlFor="challenger_state_rank" className="text-white">
                 State Rank
               </label>
               <input
@@ -116,10 +112,7 @@ export default function NewMatchForm({
               />
             </div>
             <div>
-              <label
-                htmlFor="challenger_world_rank"
-                className="text-white"
-              >
+              <label htmlFor="challenger_world_rank" className="text-white">
                 World Rank
               </label>
               <input
@@ -166,18 +159,17 @@ export default function NewMatchForm({
                       className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
                       onClick={() =>
                         handlePlayerSelect(
-                          result.name,
+                          result.name.firstName,
+                          result.name.lastName,
                           result.stateRank,
                           result.worldRank,
                           false
                         )
                       }
                     >
-                      {result.callsign
-                        ? `${result.name.split(" ")[0]} "${result.callsign}" ${
-                            result.name.split(" ")[1]
-                          }`
-                        : result.name}
+                      {result.name.callsign
+                        ? `${result.name.firstName} "${result.name.callsign}" ${result.name.lastName}`
+                        : `${result.name.firstName} ${result.name.lastName}`}
                     </div>
                   ))}
                 </div>
@@ -204,10 +196,7 @@ export default function NewMatchForm({
               />
             </div>
             <div>
-              <label
-                htmlFor="challenged_world_rank"
-                className="text-white"
-              >
+              <label htmlFor="challenged_world_rank" className="text-white">
                 World Rank
               </label>
               <input
@@ -236,7 +225,11 @@ export default function NewMatchForm({
             }`}
             onClick={() => handleSetSelection(1)}
           >
-            <span className={`text-white ${selectedSets === 1 && "text-black"}`}>1 set of 1</span>
+            <span
+              className={`text-white ${selectedSets === 1 && "text-black"}`}
+            >
+              1 set of 1
+            </span>
           </div>
           <div
             className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
@@ -244,7 +237,11 @@ export default function NewMatchForm({
             }`}
             onClick={() => handleSetSelection(2)}
           >
-            <span className={`text-white ${selectedSets === 2 && "text-black"}`}>2 sets of 3</span>
+            <span
+              className={`text-white ${selectedSets === 2 && "text-black"}`}
+            >
+              2 sets of 3
+            </span>
           </div>
           <div
             className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
@@ -252,7 +249,11 @@ export default function NewMatchForm({
             }`}
             onClick={() => handleSetSelection(3)}
           >
-            <span className={`text-white ${selectedSets === 3 && "text-black"}`}>3 sets of 5</span>
+            <span
+              className={`text-white ${selectedSets === 3 && "text-black"}`}
+            >
+              3 sets of 5
+            </span>
           </div>
           <div
             className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
@@ -260,7 +261,11 @@ export default function NewMatchForm({
             }`}
             onClick={() => handleSetSelection(4)}
           >
-            <span className={`text-white ${selectedSets === 4 && "text-black"}`}>4 sets of 7</span>
+            <span
+              className={`text-white ${selectedSets === 4 && "text-black"}`}
+            >
+              4 sets of 7
+            </span>
           </div>
         </div>
       </fieldset>

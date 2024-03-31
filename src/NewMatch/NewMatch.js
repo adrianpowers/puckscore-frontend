@@ -48,11 +48,11 @@ export default function NewMatch() {
     }
   };
 
-  const handlePlayerSelect = (playerName, playerStateRank, playerWorldRank, isChallenger) => {
+  const handlePlayerSelect = (playerFirstName, playerLastName, playerStateRank, playerWorldRank, isChallenger) => {
     if (isChallenger) {
       setFormData({
         ...formData,
-        challenger_name: playerName,
+        challenger_name: `${playerFirstName} ${playerLastName}`,
         challenger_state_rank: playerStateRank,
         challenger_world_rank: playerWorldRank,
       });
@@ -60,7 +60,7 @@ export default function NewMatch() {
     } else {
       setFormData({
         ...formData,
-        challenged_name: playerName,
+        challenged_name: `${playerFirstName} ${playerLastName}`,
         challenged_state_rank: playerStateRank,
         challenged_world_rank: playerWorldRank,
       });
