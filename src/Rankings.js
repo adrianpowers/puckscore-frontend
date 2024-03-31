@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HomeButton from "./utils/HomeButton"; 
+import HomeButton from "./utils/HomeButton";
 import { fetchRankings } from "./utils/api";
 import "./index.css";
 
@@ -102,7 +102,7 @@ export default function Rankings() {
       if (callsign) {
         formattedName = `${firstName} "${callsign}" ${lastName}`;
       } else {
-        formattedName = `${firstName} ${lastName}`
+        formattedName = `${firstName} ${lastName}`;
       }
 
       return (
@@ -111,13 +111,18 @@ export default function Rankings() {
           <br />
           {player.stateRank ? (
             <div>
-              <span>NORTH CAROLINA RANK: <b className="text-xl">{player.stateRank}</b></span>
+              <span>
+                NORTH CAROLINA RANK:{" "}
+                <b className="text-xl">{player.stateRank}</b>
+              </span>
               <br />
             </div>
           ) : null}
           {player.worldRank ? (
             <div>
-              <span>WORLD RANK: <b className="text-xl">{player.worldRank}</b></span>
+              <span>
+                WORLD RANK: <b className="text-xl">{player.worldRank}</b>
+              </span>
               <br />
             </div>
           ) : null}
@@ -133,7 +138,7 @@ export default function Rankings() {
         Current Rankings
       </h1>
       <div className="flex justify-center">{<HomeButton />}</div>
-      <div className="flex justify-center mx-6 p-2 border-red-500">
+      <div className="flex justify-center mx-6 p-2">
         <ul className="text-white">{rankingsList}</ul>
       </div>
       <div className="flex justify-center">{<HomeButton />}</div>

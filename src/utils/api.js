@@ -35,15 +35,6 @@ export function generateUniqueId() {
   return `${randomNumber}-${timestamp}`;
 }
 
-export async function createGame(data, signal) {
-  const url = new URL(`${API_BASE_URL}/matches`);
-  return await fetchJson(
-    url,
-    { headers, signal, method: "POST", body: JSON.stringify({ data }) },
-    []
-  );
-}
-
 export async function fetchRankings(signal) {
   const url = `${API_BASE_URL}/players`;
   let data = await fetchJson(url, { headers, signal, method: "GET" }, []);
@@ -62,9 +53,42 @@ export async function searchPlayersByName(name) {
         return -1;
       }
       return a.stateRank - b.stateRank;
-    })
+    });
   } catch (error) {
     console.error("Error searching players by name:", error);
     throw error;
   }
-};
+}
+
+export async function findPlayerById(id) {
+  try {
+    const response = await fetchJson(`${API_BASE_URL}/players/id/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error searching players by id:", error);
+    throw error;
+  }
+}
+
+export async function createMatch(formData) {
+  try {
+    const response = await fetchJson("/api/matches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const matchData = await response.json();
+    return matchData;
+  } catch (error) {
+    console.error("Error creating match:", error);
+    throw error;
+  }
+}
+
+export async function fetchMatches(signal) {
+  const url = `${API_BASE_URL}/matches`;
+  let data = await fetchJson(url, { headers, signal, method: "GET" }, []);
+  return data;
+}

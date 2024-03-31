@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NewMatchForm from "./NewMatchForm"; 
-import { createMatch, generateUniqueId, searchPlayersByName } from "../utils/api";
+import NewMatchForm from "./NewMatchForm";
+import {
+  generateUniqueId,
+  searchPlayersByName,
+  createMatch,
+} from "../utils/api";
 import "../index.css";
 
 export default function NewMatch() {
@@ -19,7 +23,7 @@ export default function NewMatch() {
     id: 0,
   };
 
-  const [formData, setFormData] = useState({ ...initialFormState });  
+  const [formData, setFormData] = useState({ ...initialFormState });
   const [challengerSearchResults, setChallengerSearchResults] = useState([]);
   const [challengedSearchResults, setChallengedSearchResults] = useState([]);
   // const [errors, setErrors] = useState([]);
@@ -27,8 +31,7 @@ export default function NewMatch() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === "sets_to_win") {
-      const totalSets =
-        value === "1" ? 1 : value * 2 - 1;
+      const totalSets = value === "1" ? 1 : value * 2 - 1;
       setFormData({
         ...formData,
         sets_to_win: parseInt(value),
@@ -41,14 +44,20 @@ export default function NewMatch() {
       });
     }
 
-    if(name === "challenger_name"){
-      searchPlayers(value, setChallengerSearchResults)
-    } else if(name === "challenged_name") {
-      searchPlayers(value, setChallengedSearchResults)
+    if (name === "challenger_name") {
+      searchPlayers(value, setChallengerSearchResults);
+    } else if (name === "challenged_name") {
+      searchPlayers(value, setChallengedSearchResults);
     }
   };
 
-  const handlePlayerSelect = (playerFirstName, playerLastName, playerStateRank, playerWorldRank, isChallenger) => {
+  const handlePlayerSelect = (
+    playerFirstName,
+    playerLastName,
+    playerStateRank,
+    playerWorldRank,
+    isChallenger
+  ) => {
     if (isChallenger) {
       setFormData({
         ...formData,
@@ -64,7 +73,7 @@ export default function NewMatch() {
         challenged_state_rank: playerStateRank,
         challenged_world_rank: playerWorldRank,
       });
-      setChallengedSearchResults([]); 
+      setChallengedSearchResults([]);
     }
   };
 
@@ -80,13 +89,13 @@ export default function NewMatch() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // const ac = new AbortController();
-
-    // Generate a unique ID for the match
-    const matchId = generateUniqueId();
-
-    // Use the match ID in the URL path
-    navigate(`/matches/${matchId}`);
+    try {
+      const matchData = await createMatch(formData);
+      const matchId = matchData._id;
+      navigate(`/matches/${matchId}`);
+    } catch (error) {
+      // Handle error
+    }
   };
 
   return (
