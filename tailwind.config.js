@@ -12,7 +12,7 @@ module.exports = {
         "primary-blue": "#437BBF",
         "primary-red": "#CD4438",
         "primary-yellow": "#EAD254",
-        "secondary-blue": "2D527F",
+        "secondary-blue": "#2D527F",
       },
     },
   },

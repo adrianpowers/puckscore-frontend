@@ -18,7 +18,10 @@ export default function NewMatch() {
     challenged_state_rank: 0,
     challenger_world_rank: 0,
     challenged_world_rank: 0,
+    challenger_id: "",
+    challenged_id: "",
     sets_to_win: "1",
+    pending_approval: true,
     total_sets: "1",
     id: 0,
   };
@@ -58,24 +61,29 @@ export default function NewMatch() {
     playerWorldRank,
     isChallenger
   ) => {
-    if (isChallenger) {
-      setFormData({
-        ...formData,
-        challenger_name: `${playerFirstName} ${playerLastName}`,
-        challenger_state_rank: playerStateRank,
-        challenger_world_rank: playerWorldRank,
-      });
-      setChallengerSearchResults([]);
-    } else {
-      setFormData({
-        ...formData,
-        challenged_name: `${playerFirstName} ${playerLastName}`,
-        challenged_state_rank: playerStateRank,
-        challenged_world_rank: playerWorldRank,
-      });
-      setChallengedSearchResults([]);
-    }
+    // Create a function to update the formData state based on the current state
+    setFormData(prevFormData => {
+      // Create a new object to update formData
+      const updatedFormData = { ...prevFormData };
+      // Update the formData based on the isChallenger flag
+      if (isChallenger) {
+        updatedFormData.challenger_name = `${playerFirstName} ${playerLastName}`;
+        updatedFormData.challenger_state_rank = playerStateRank;
+        updatedFormData.challenger_world_rank = playerWorldRank;
+        // Clear the search results
+        setChallengerSearchResults([]);
+      } else {
+        updatedFormData.challenged_name = `${playerFirstName} ${playerLastName}`;
+        updatedFormData.challenged_state_rank = playerStateRank;
+        updatedFormData.challenged_world_rank = playerWorldRank;
+        // Clear the search results
+        setChallengedSearchResults([]);
+      }
+      // Return the updated formData
+      return updatedFormData;
+    });
   };
+  
 
   const searchPlayers = (searchQuery, setSearchResults) => {
     searchPlayersByName(searchQuery)
@@ -92,7 +100,7 @@ export default function NewMatch() {
     try {
       const matchData = await createMatch(formData);
       const matchId = matchData._id;
-      navigate(`/matches/${matchId}`);
+      navigate(`/matches/id/${matchId}`);
     } catch (error) {
       // Handle error
     }
