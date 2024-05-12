@@ -9,7 +9,9 @@ import "./index.css";
 export default function Matches() {
   // State variables to store matches data, resolved matches, and error
   const [matchesInProgress, setMatchesInProgress] = useState([]);
-  const [resolvedInProgressMatches, setResolvedInProgressMatches] = useState([]);
+  const [resolvedInProgressMatches, setResolvedInProgressMatches] = useState(
+    []
+  );
   const [pendingMatches, setPendingMatches] = useState([]);
   const [resolvedPendingMatches, setResolvedPendingMatches] = useState([]);
   const [completedMatches, setCompletedMatches] = useState([]);
@@ -26,9 +28,13 @@ export default function Matches() {
         // Fetch matches data
         const data = await fetchMatches(ac.signal);
         // Filter in-progress and completed matches
-        const inProgress = data.filter(match => match.inProgress);
-        const completed = data.filter(match => !match.inProgress & !match.pendingApproval);
-        const pending = data.filter(match => !match.inProgress & match.pendingApproval)
+        const inProgress = data.filter((match) => match.inProgress);
+        const completed = data.filter(
+          (match) => !match.inProgress & !match.pendingApproval
+        );
+        const pending = data.filter(
+          (match) => !match.inProgress & match.pendingApproval
+        );
         // Set state with in-progress and completed matches
         setMatchesInProgress(inProgress);
         setPendingMatches(pending);
@@ -57,7 +63,10 @@ export default function Matches() {
         const firstPlayerPromise = findPlayerById(match.players[0]);
         const secondPlayerPromise = findPlayerById(match.players[1]);
         // Wait for both player promises to resolve
-        const [firstPlayer, secondPlayer] = await Promise.all([firstPlayerPromise, secondPlayerPromise]);
+        const [firstPlayer, secondPlayer] = await Promise.all([
+          firstPlayerPromise,
+          secondPlayerPromise,
+        ]);
 
         // Format player names
         const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
@@ -92,7 +101,10 @@ export default function Matches() {
         const secondPlayerPromise = findPlayerById(match.players[1]);
 
         // Wait for both player promises to resolve
-        const [firstPlayer, secondPlayer] = await Promise.all([firstPlayerPromise, secondPlayerPromise]);
+        const [firstPlayer, secondPlayer] = await Promise.all([
+          firstPlayerPromise,
+          secondPlayerPromise,
+        ]);
 
         // Format player names
         const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
@@ -127,7 +139,10 @@ export default function Matches() {
         const secondPlayerPromise = findPlayerById(match.players[1]);
 
         // Wait for both player promises to resolve
-        const [firstPlayer, secondPlayer] = await Promise.all([firstPlayerPromise, secondPlayerPromise]);
+        const [firstPlayer, secondPlayer] = await Promise.all([
+          firstPlayerPromise,
+          secondPlayerPromise,
+        ]);
 
         // Format player names
         const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
@@ -155,73 +170,154 @@ export default function Matches() {
   // Render matches in-progress list
   const renderInProgressMatches = () => {
     // Map through resolved in-progress matches and create JSX elements
-    return resolvedInProgressMatches.map(({ matchId, firstPlayerName, secondPlayerName, date }) => (
-      <Link to={`/matches/id/${matchId}`} key={matchId}> 
-        <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md mb-4 w-full hover:bg-secondary-blue">
-          {`${firstPlayerName} vs. ${secondPlayerName}`}
-          <br />
-          <span className="text-sm text-primary-yellow">
-            {date}
-          </span>
-        </button>
-      </Link>
-    ));
+    return resolvedInProgressMatches.map(
+      ({ matchId, firstPlayerName, secondPlayerName, date }, index) =>
+        index === resolvedInProgressMatches.length - 1 ? (
+          index % 2 ? (
+            <Link to={`/matches/id/${matchId}`} key={matchId}>
+              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue">
+                {`${firstPlayerName} vs. ${secondPlayerName}`}
+                <br />
+                <span className="text-sm text-primary-yellow">{date}</span>
+              </button>
+            </Link>
+          ) : (
+            <Link to={`/matches/id/${matchId}`} key={matchId}>
+              <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
+                {`${firstPlayerName} vs. ${secondPlayerName}`}
+                <br />
+                <span className="text-sm text-primary-yellow">{date}</span>
+              </button>
+            </Link>
+          )
+        ) : index % 2 ? (
+          <Link to={`/matches/id/${matchId}`} key={matchId}>
+            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue mb-2">
+              {`${firstPlayerName} vs. ${secondPlayerName}`}
+              <br />
+              <span className="text-sm text-primary-yellow">{date}</span>
+            </button>
+          </Link>
+        ) : (
+          <Link to={`/matches/id/${matchId}`} key={matchId}>
+            <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
+              {`${firstPlayerName} vs. ${secondPlayerName}`}
+              <br />
+              <span className="text-sm text-primary-yellow">{date}</span>
+            </button>
+          </Link>
+        )
+    );
   };
 
   const renderPendingMatches = () => {
     // Map through matches that are pending approval before rank changes
-    return resolvedPendingMatches.map(({ matchId, firstPlayerName, secondPlayerName, date }) => (
-      <Link to={`/matches/id/${matchId}`} key={matchId}>
-        <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md mb-4 w-full hover:bg-secondary-blue">
-          {`${firstPlayerName} vs. ${secondPlayerName}`}
-          <br />
-          <span className="text-sm text-primary-yellow">
-            {date}
-          </span>
-        </button>
-      </Link>
-    ));
+    return resolvedPendingMatches.map(
+      ({ matchId, firstPlayerName, secondPlayerName, date }, index) =>
+        index === resolvedPendingMatches.length - 1 ? (
+          index % 2 ? (
+            <Link to={`/matches/id/${matchId}`} key={matchId}>
+              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue">
+                {`${firstPlayerName} vs. ${secondPlayerName}`}
+                <br />
+                <span className="text-sm text-primary-yellow">{date}</span>
+              </button>
+            </Link>
+          ) : (
+            <Link to={`/matches/id/${matchId}`} key={matchId}>
+              <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
+                {`${firstPlayerName} vs. ${secondPlayerName}`}
+                <br />
+                <span className="text-sm text-primary-yellow">{date}</span>
+              </button>
+            </Link>
+          )
+        ) : index % 2 ? (
+          <Link to={`/matches/id/${matchId}`} key={matchId}>
+            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue mb-2">
+              {`${firstPlayerName} vs. ${secondPlayerName}`}
+              <br />
+              <span className="text-sm text-primary-yellow">{date}</span>
+            </button>
+          </Link>
+        ) : (
+          <Link to={`/matches/id/${matchId}`} key={matchId}>
+            <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
+              {`${firstPlayerName} vs. ${secondPlayerName}`}
+              <br />
+              <span className="text-sm text-primary-yellow">{date}</span>
+            </button>
+          </Link>
+        )
+    );
   };
 
   // Render completed matches list
   const renderCompletedMatches = () => {
     // Map through resolved completed matches and create JSX elements
-    return resolvedCompletedMatches.map(({ matchId, firstPlayerName, secondPlayerName, date }) => (
-      <Link to={`/matches/id/${matchId}`} key={matchId}>
-        <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md mb-4 w-full hover:bg-secondary-blue">
-          {`${firstPlayerName} vs. ${secondPlayerName}`}
-          <br />
-          <span className="text-sm text-primary-yellow">
-            {date}
-          </span>
-        </button>
-      </Link>
-    ));
+    return resolvedCompletedMatches.map(
+      ({ matchId, firstPlayerName, secondPlayerName, date }, index) =>
+        index === resolvedCompletedMatches.length - 1 ? (
+          index % 2 ? (
+            <Link to={`/matches/id/${matchId}`} key={matchId}>
+              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue">
+                {`${firstPlayerName} vs. ${secondPlayerName}`}
+                <br />
+                <span className="text-sm text-primary-yellow">{date}</span>
+              </button>
+            </Link>
+          ) : (
+            <Link to={`/matches/id/${matchId}`} key={matchId}>
+              <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
+                {`${firstPlayerName} vs. ${secondPlayerName}`}
+                <br />
+                <span className="text-sm text-primary-yellow">{date}</span>
+              </button>
+            </Link>
+          )
+        ) : index % 2 ? (
+          <Link to={`/matches/id/${matchId}`} key={matchId}>
+            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue mb-2">
+              {`${firstPlayerName} vs. ${secondPlayerName}`}
+              <br />
+              <span className="text-sm text-primary-yellow">{date}</span>
+            </button>
+          </Link>
+        ) : (
+          <Link to={`/matches/id/${matchId}`} key={matchId}>
+            <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
+              {`${firstPlayerName} vs. ${secondPlayerName}`}
+              <br />
+              <span className="text-sm text-primary-yellow">{date}</span>
+            </button>
+          </Link>
+        )
+    );
   };
 
   // Render component content
   return (
     <section className="flex flex-col justify-center min-h-screen bg-primary-blue font-custom flex-grow">
-      <div className="flex justify-center mt-6">{<HomeButton />}</div>
+      <div className="text-center mt-6">{<HomeButton />}</div>
       <h1 className="text-3xl font-bold text-center text-white m-6">
         Matches in Progress
       </h1>
-      <div className="flex justify-center mx-6 p-2">
-        <ul className="text-white flex flex-col items-center">{renderInProgressMatches()}</ul>
+      <div className="text-center mx-6 p-2">
+        <ul className="text-white items-center">{renderInProgressMatches()}</ul>
       </div>
       <h1 className="text-3xl font-bold text-center text-white m-6">
         Completed Matches
       </h1>
-      <div className="flex justify-center mx-6 p-2">
-        <ul className="text-white flex flex-col items-center">{renderCompletedMatches()}</ul>
+      <div className="text-center mx-6 p-2">
+        <ul className="text-white items-center">{renderCompletedMatches()}</ul>
       </div>
       <h1 className="text-3xl font-bold text-center text-white m-6">
         Pending Admin Approval
       </h1>
-      <div className="flex justify-center mx-6 p-2">
-        <ul className="text-white flex flex-col items-center">{renderPendingMatches()}</ul>
+      <div className="text-center mx-6 p-2">
+        <ul className="text-white items-center">{renderPendingMatches()}</ul>
       </div>
-      <div className="flex justify-center">{<HomeButton />}</div>
+      <div className="mt-6 text-center">{<HomeButton />}</div>
     </section>
   );
 }

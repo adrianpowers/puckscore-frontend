@@ -8,23 +8,23 @@ export default function Home() {
         <br/>North Carolina 
         <br/>Puckscore!  
       </h1>
-      <div className="flex flex-col justify-center items-center mt-6 gap-y-3">
+      <section id="buttons" className="text-center mt-6">
         <Link to="newmatch">
-          <button className="bg-primary-red text-white text-xl rounded-full w-72 h-24">
+          <button className="bg-primary-red text-white text-xl rounded-full w-[75%] h-[80%]">
             <b>Create New Match</b>
           </button>
         </Link>
         <Link to="matches">
-          <button className="bg-primary-yellow text-xl rounded-full w-72 h-12 mt-8">
+          <button className="bg-primary-yellow text-xl rounded-full w-[75%] h-[40%] mt-8 mb-2">
             View All Matches
           </button>
         </Link>
         <Link to="rankings">
-          <button className="bg-primary-red text-white text-xl rounded-full w-72 h-12">
-            View Current Rankings
+          <button className="bg-primary-red text-white text-xl rounded-full w-[75%] h-[40%]">
+            Rankings and Player Data
           </button>
         </Link>
-      </div>
+      </section>
     </section>
   );
 }

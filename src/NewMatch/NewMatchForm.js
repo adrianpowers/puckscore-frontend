@@ -6,16 +6,16 @@ export default function NewMatchForm({
   handleChange,
   handleSubmit,
   handlePlayerSelect,
-  challengerSearchResults,
-  challengedSearchResults,
+  playerOneSearchResults,
+  playerTwoSearchResults,
 }) {
   const [selectedSets, setSelectedSets] = useState(newMatch.sets_to_win);
-  const [challengerDropdownVisible, setChallengerDropdownVisible] =
+  const [playerOneDropdownVisible, setPlayerOneDropdownVisible] =
     useState(false);
-  const [challengedDropdownVisible, setChallengedDropdownVisible] =
+  const [playerTwoDropdownVisible, setPlayerTwoDropdownVisible] =
     useState(false);
-  const challengerDropdownRef = useRef(null);
-  const challengedDropdownRef = useRef(null);
+  const playerOneDropdownRef = useRef(null);
+  const playerTwoDropdownRef = useRef(null);
 
   const handleSetSelection = (sets) => {
     setSelectedSets(sets);
@@ -25,16 +25,16 @@ export default function NewMatchForm({
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        challengerDropdownRef.current &&
-        !challengerDropdownRef.current.contains(event.target)
+        playerOneDropdownRef.current &&
+        !playerOneDropdownRef.current.contains(event.target)
       ) {
-        setChallengerDropdownVisible(false);
+        setPlayerOneDropdownVisible(false);
       }
       if (
-        challengedDropdownRef.current &&
-        !challengedDropdownRef.current.contains(event.target)
+        playerTwoDropdownRef.current &&
+        !playerTwoDropdownRef.current.contains(event.target)
       ) {
-        setChallengedDropdownVisible(false);
+        setPlayerTwoDropdownVisible(false);
       }
     }
 
@@ -47,32 +47,32 @@ export default function NewMatchForm({
   return (
     <form onSubmit={handleSubmit} className="max-w-lg">
       <div className="flex justify-evenly flex-wrap">
-        {/* Challenger (Player 1) */}
+        {/* PlayerOne (Player 1) */}
         <div className="relative flex flex-col items-center mb-7 w-[90%]">
-          <label htmlFor="challenger_name" className="hidden text-white">
-            Challenger Name
+          <label htmlFor="playerOne_name" className="hidden text-white">
+            Player One Name
           </label>
           <input
             required
-            id="challenger_name"
+            id="playerOne_name"
             type="text"
-            name="challenger_name"
-            placeholder="Challenger's Name"
-            value={newMatch.challenger_name}
+            name="playerOne_name"
+            placeholder="Search for a Player"
+            value={newMatch.playerOne_name}
             onChange={handleChange}
-            onFocus={() => setChallengerDropdownVisible(true)}
+            onFocus={() => setPlayerOneDropdownVisible(true)}
             className="form-input text-center px-1 mb-2 w-full"
           />
-          {challengerDropdownVisible && (
+          {playerOneDropdownVisible && (
             <div
-              ref={challengerDropdownRef}
+              ref={playerOneDropdownRef}
               className="absolute z-10 mt-1 w-full bg-white rounded border border-gray-300 shadow-md"
             >
               {/* Dropdown items */}
-              {challengerSearchResults.length > 0 && (
+              {playerOneSearchResults.length > 0 && (
                 <div className="absolute z-10 mt-1 w-full bg-white rounded border border-gray-300 shadow-md">
                   {/* Dropdown items */}
-                  {challengerSearchResults.map((result) => (
+                  {playerOneSearchResults.map((result) => (
                     <div
                       key={result._id}
                       className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
@@ -98,29 +98,29 @@ export default function NewMatchForm({
 
           <div className="flex justify-center w-full gap-x-3">
             <div>
-              <label htmlFor="challenger_state_rank" className="text-white">
+              <label htmlFor="playerOne_state_rank" className="text-white">
                 State Rank
               </label>
               <input
-                id="challenger_state_rank"
+                id="playerOne_state_rank"
                 type="number"
-                name="challenger_state_rank"
+                name="playerOne_state_rank"
                 placeholder="0"
-                value={parseInt(newMatch.challenger_state_rank)}
+                value={parseInt(newMatch.playerOne_state_rank)}
                 onChange={handleChange}
                 className="form-input px-1 w-full"
               />
             </div>
             <div>
-              <label htmlFor="challenger_world_rank" className="text-white">
+              <label htmlFor="playerOne_world_rank" className="text-white">
                 World Rank
               </label>
               <input
-                id="challenger_world_rank"
+                id="playerOne_world_rank"
                 type="number"
-                name="challenger_world_rank"
+                name="playerOne_world_rank"
                 placeholder="0"
-                value={parseInt(newMatch.challenger_world_rank)}
+                value={parseInt(newMatch.playerOne_world_rank)}
                 onChange={handleChange}
                 className="form-input px-1 w-full"
               />
@@ -128,32 +128,32 @@ export default function NewMatchForm({
           </div>
         </div>
 
-        {/* Challenged (Player 2) */}
+        {/* PlayerTwo (Player 2) */}
         <div className="relative flex flex-col items-center mt-4 w-[90%]">
-          <label htmlFor="challenged_name" className="hidden text-white">
-            Challenged Name
+          <label htmlFor="playerTwo_name" className="hidden text-white">
+            Player Two Name
           </label>
           <input
             required
-            id="challenged_name"
+            id="playerTwo_name"
             type="text"
-            name="challenged_name"
-            placeholder="Challenged Player's Name"
-            value={newMatch.challenged_name}
+            name="playerTwo_name"
+            placeholder="Search for a Player"
+            value={newMatch.playerTwo_name}
             onChange={handleChange}
-            onFocus={() => setChallengedDropdownVisible(true)}
+            onFocus={() => setPlayerTwoDropdownVisible(true)}
             className="form-input text-center px-1 mb-2 w-full"
           />
-          {challengedDropdownVisible && (
+          {playerTwoDropdownVisible && (
             <div
-              ref={challengedDropdownRef}
+              ref={playerTwoDropdownRef}
               className="absolute z-10 mt-1 w-full bg-white rounded border border-gray-300 shadow-md"
             >
               {/* Dropdown items */}
-              {challengedSearchResults.length > 0 && (
+              {playerTwoSearchResults.length > 0 && (
                 <div className="absolute z-10 mt-1 w-full bg-white rounded border border-gray-300 shadow-md">
                   {/* Dropdown items */}
-                  {challengedSearchResults.map((result) => (
+                  {playerTwoSearchResults.map((result) => (
                     <div
                       key={result._id}
                       className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
@@ -180,31 +180,31 @@ export default function NewMatchForm({
           <div className="flex justify-center w-full gap-x-3">
             <div>
               <label
-                htmlFor="challenged_state_rank"
+                htmlFor="playerTwo_state_rank"
                 className="text-white mr-3"
               >
                 State Rank
               </label>
               <input
-                id="challenged_state_rank"
+                id="playerTwo_state_rank"
                 type="number"
-                name="challenged_state_rank"
+                name="playerTwo_state_rank"
                 placeholder="0"
-                value={parseInt(newMatch.challenged_state_rank)}
+                value={parseInt(newMatch.playerTwo_state_rank)}
                 onChange={handleChange}
                 className="form-input px-1 w-full"
               />
             </div>
             <div>
-              <label htmlFor="challenged_world_rank" className="text-white">
+              <label htmlFor="playerTwo_world_rank" className="text-white">
                 World Rank
               </label>
               <input
-                id="challenged_world_rank"
+                id="playerTwo_world_rank"
                 type="number"
-                name="challenged_world_rank"
+                name="playerTwo_world_rank"
                 placeholder="0"
-                value={parseInt(newMatch.challenged_world_rank)}
+                value={parseInt(newMatch.playerTwo_world_rank)}
                 onChange={handleChange}
                 className="form-input px-1 w-full"
               />
@@ -277,6 +277,8 @@ export default function NewMatchForm({
         >
           Create New Match
         </button>
+      </div>
+      <div className="text-center mt-4">
         <HomeButton />
       </div>
     </form>

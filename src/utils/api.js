@@ -73,23 +73,23 @@ export async function findPlayerById(id) {
 export async function createMatch(formData) {
   const totalSets = formData.totalSets; 
   try {
-    // Fetch challenger and challenged player IDs
-    const challengerId = await getPlayerId(formData, formData.challenger_name);
-    const challengedId = await getPlayerId(formData, formData.challenged_name);
+    // Fetch playerOne and playerTwo player IDs
+    const playerOneId = await getPlayerId(formData, formData.playerOne_name);
+    const playerTwoId = await getPlayerId(formData, formData.playerTwo_name);
 
     // Update formData with player IDs
-    formData.challenger_id = challengerId;
-    formData.challenged_id = challengedId;
+    formData.playerOne_id = playerOneId;
+    formData.playerTwo_id = playerTwoId;
 
-    // Fetch player objects for challenger and challenged players
-    const [challenger, challenged] = await Promise.all([
-      findPlayerById(challengerId),
-      findPlayerById(challengedId),
+    // Fetch player objects for playerOne and playerTwo players
+    const [playerOne, playerTwo] = await Promise.all([
+      findPlayerById(playerOneId),
+      findPlayerById(playerTwoId),
     ]);
 
     const matchData = {
       ...formData, // Include other formData fields
-      players: [challenger, challenged], // Add player objects to the players array
+      players: [playerOne, playerTwo], // Add player objects to the players array
     };
 
     // Create the match with updated matchData
@@ -112,21 +112,20 @@ async function getPlayerId(formData, name) {
   try {
     // Search for the player by name to get the player object
     const players = await searchPlayersByName(name.split(" ")[0]);
-    console.log("PLAYERS", players, "PLAYER LENGTH", players.length);
     // If the player object is found, return the player's ID
     if (players.length === 1) {
       return players[0]._id;
     } else if (players.length > 1) {
       for (let player of players) {
         console.log(
-          player.stateRank === formData.challenger_state_rank ||
-            player.stateRank === formData.challenged_state_rank
+          player.stateRank === formData.playerOne_state_rank ||
+            player.stateRank === formData.playerTwo_state_rank
         );
         if (
-          (player.stateRank === formData.challenger_state_rank ||
-            player.stateRank === formData.challenged_state_rank) &&
-          (player.worldRank === formData.challenger_world_rank ||
-            player.worldRank === formData.challenged_world_rank)
+          (player.stateRank === formData.playerOne_state_rank ||
+            player.stateRank === formData.playerTwo_state_rank) &&
+          (player.worldRank === formData.playerOne_world_rank ||
+            player.worldRank === formData.playerTwo_world_rank)
         ) {
           return player._id;
         }

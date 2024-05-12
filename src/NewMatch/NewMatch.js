@@ -12,14 +12,14 @@ export default function NewMatch() {
   const navigate = useNavigate();
 
   const initialFormState = {
-    challenger_name: "",
-    challenged_name: "",
-    challenger_state_rank: 0,
-    challenged_state_rank: 0,
-    challenger_world_rank: 0,
-    challenged_world_rank: 0,
-    challenger_id: "",
-    challenged_id: "",
+    playerOne_name: "",
+    playerTwo_name: "",
+    playerOne_state_rank: 0,
+    playerTwo_state_rank: 0,
+    playerOne_world_rank: 0,
+    playerTwo_world_rank: 0,
+    playerOne_id: "",
+    playerTwo_id: "",
     sets_to_win: "1",
     pending_approval: true,
     total_sets: "1",
@@ -27,8 +27,8 @@ export default function NewMatch() {
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
-  const [challengerSearchResults, setChallengerSearchResults] = useState([]);
-  const [challengedSearchResults, setChallengedSearchResults] = useState([]);
+  const [playerOneSearchResults, setPlayerOneSearchResults] = useState([]);
+  const [playerTwoSearchResults, setPlayerTwoSearchResults] = useState([]);
   // const [errors, setErrors] = useState([]);
 
   const handleChange = (event) => {
@@ -47,10 +47,10 @@ export default function NewMatch() {
       });
     }
 
-    if (name === "challenger_name") {
-      searchPlayers(value, setChallengerSearchResults);
-    } else if (name === "challenged_name") {
-      searchPlayers(value, setChallengedSearchResults);
+    if (name === "playerOne_name") {
+      searchPlayers(value, setPlayerOneSearchResults);
+    } else if (name === "playerTwo_name") {
+      searchPlayers(value, setPlayerTwoSearchResults);
     }
   };
 
@@ -59,25 +59,25 @@ export default function NewMatch() {
     playerLastName,
     playerStateRank,
     playerWorldRank,
-    isChallenger
+    isPlayerOne
   ) => {
     // Create a function to update the formData state based on the current state
     setFormData(prevFormData => {
       // Create a new object to update formData
       const updatedFormData = { ...prevFormData };
-      // Update the formData based on the isChallenger flag
-      if (isChallenger) {
-        updatedFormData.challenger_name = `${playerFirstName} ${playerLastName}`;
-        updatedFormData.challenger_state_rank = playerStateRank;
-        updatedFormData.challenger_world_rank = playerWorldRank;
+      // Update the formData based on the isPlayerOne flag
+      if (isPlayerOne) {
+        updatedFormData.playerOne_name = `${playerFirstName} ${playerLastName}`;
+        updatedFormData.playerOne_state_rank = playerStateRank;
+        updatedFormData.playerOne_world_rank = playerWorldRank;
         // Clear the search results
-        setChallengerSearchResults([]);
+        setPlayerOneSearchResults([]);
       } else {
-        updatedFormData.challenged_name = `${playerFirstName} ${playerLastName}`;
-        updatedFormData.challenged_state_rank = playerStateRank;
-        updatedFormData.challenged_world_rank = playerWorldRank;
+        updatedFormData.playerTwo_name = `${playerFirstName} ${playerLastName}`;
+        updatedFormData.playerTwo_state_rank = playerStateRank;
+        updatedFormData.playerTwo_world_rank = playerWorldRank;
         // Clear the search results
-        setChallengedSearchResults([]);
+        setPlayerTwoSearchResults([]);
       }
       // Return the updated formData
       return updatedFormData;
@@ -118,8 +118,8 @@ export default function NewMatch() {
           handleSubmit={handleSubmit}
           handlePlayerSelect={handlePlayerSelect}
           searchPlayers={searchPlayers}
-          challengerSearchResults={challengerSearchResults}
-          challengedSearchResults={challengedSearchResults}
+          playerOneSearchResults={playerOneSearchResults}
+          playerTwoSearchResults={playerTwoSearchResults}
         />
       </div>
     </div>

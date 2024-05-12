@@ -105,30 +105,62 @@ export default function Rankings() {
         formattedName = `${firstName} ${lastName}`;
       }
 
-      return (
-        <li key={index} className="my-2 text-center">
-          <b className="text-2xl">{formattedName.toUpperCase()}</b>
-          <br />
-          {player.stateRank ? (
-            <div>
-              <span>
-                NORTH CAROLINA RANK:{" "}
-                <b className="text-xl">{player.stateRank}</b>
-              </span>
-              <br />
-            </div>
-          ) : null}
-          {player.worldRank ? (
-            <div>
-              <span>
-                WORLD RANK: <b className="text-xl">{player.worldRank}</b>
-              </span>
-              <br />
-            </div>
-          ) : null}
-          <hr className="my-2" />
-        </li>
-      );
+      let returnStatement = null;
+
+      // This makes sure the <hr /> is applied at the top of the first player and the bottom of the last.
+      index % 2
+        ? (returnStatement = (
+            <li key={index} className="my-2 text-center">
+              <button className="button bg-primary-red w-[85%] p-2 rounded">
+                <b className="text-2xl">{formattedName.toUpperCase()}</b>
+                <br />
+                {player.stateRank ? (
+                  <div>
+                    <span>
+                      NORTH CAROLINA RANK:{" "}
+                      <b className="text-xl">{player.stateRank}</b>
+                    </span>
+                    <br />
+                  </div>
+                ) : null}
+                {player.worldRank ? (
+                  <div>
+                    <span>
+                      WORLD RANK: <b className="text-xl">{player.worldRank}</b>
+                    </span>
+                    <br />
+                  </div>
+                ) : null}
+              </button>
+            </li>
+          ))
+        : (returnStatement = (
+            <li key={index} className="my-2 text-center">
+              <button className="button bg-secondary-blue w-[85%] p-2 rounded">
+                <b className="text-2xl">{formattedName.toUpperCase()}</b>
+                <br />
+                {player.stateRank ? (
+                  <div>
+                    <span>
+                      NORTH CAROLINA RANK:{" "}
+                      <b className="text-xl">{player.stateRank}</b>
+                    </span>
+                    <br />
+                  </div>
+                ) : null}
+                {player.worldRank ? (
+                  <div>
+                    <span>
+                      WORLD RANK: <b className="text-xl">{player.worldRank}</b>
+                    </span>
+                    <br />
+                  </div>
+                ) : null}
+              </button>
+            </li>
+          ));
+
+      return returnStatement;
     });
 
   // The following return only appears if the screen is vertical.
@@ -137,11 +169,12 @@ export default function Rankings() {
       <h1 className="text-4xl font-bold text-center text-white m-6">
         Current Rankings
       </h1>
-      <div className="flex justify-center">{<HomeButton />}</div>
+      <div className="text-center">{<HomeButton />}</div>
+
       <div className="flex justify-center mx-6 p-2">
         <ul className="text-white">{rankingsList}</ul>
       </div>
-      <div className="flex justify-center">{<HomeButton />}</div>
+      <div className="text-center">{<HomeButton />}</div>
     </section>
   );
 }

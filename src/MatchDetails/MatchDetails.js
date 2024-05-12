@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchMatchDetailsById, findPlayerById } from "../utils/api";
+import HomeButton from "../utils/HomeButton.js"; // Importing the HomeButton component using relative path
 import "../index.css";
 
 export default function MatchDetails() {
@@ -31,7 +32,6 @@ export default function MatchDetails() {
     };
     fetchData();
 
-    console.log(players);
   }, [matchId]);
 
   useEffect(() => {
@@ -60,8 +60,6 @@ export default function MatchDetails() {
         setPlayerOneWorldRank(players[0].worldRank);
         setPlayerTwoWorldRank(players[1].worldRank);
 
-        console.log(players);
-        console.log(playerOneName, playerTwoName);
       } catch (err) {
         console.error("Error fetching player details:", err);
       }
@@ -72,29 +70,38 @@ export default function MatchDetails() {
     return <div>Loading...</div>;
   }
 
-  console.log(players);
-  console.log(playerOneName, playerTwoName);
-
   return (
-    <div className="flex flex-col md:flex-row md:justify-center md:p-4 h-screen bg-primary-blue">
-      <div className="md:text-left text-center md:mr-4 mb-4 ">
-        <h1 className="mt-8 md:mt-0 px-2 text-3xl text-primary-yellow font-bold">
-          {playerOneName.toUpperCase()}
+    <div className="flex flex-col md:justify-center md:p-4 h-screen bg-primary-blue">
+      <section
+        id="playerInfo"
+        className="sm:flex sm:flex-row sm:justify-between sm:p-4"
+      >
+        <div className="text-center mb-4 px-2">
+          <h1 className="mt-8 sm:mt-0 text-3xl text-primary-yellow font-bold">
+            {playerOneName.toUpperCase()}
+          </h1>
+          <h2 className="text-xl px-2 text-primary-yellow font-bold">
+            (NC-{playerOneStateRank} | W-{playerOneWorldRank})
+          </h2>
+        </div>
+        <h1 className="text-primary-yellow font-bold text-center self-center mb-4">
+          VS.
         </h1>
-        <h2 className="text-xl px-2 text-primary-yellow font-bold">
-          (NC-{playerOneStateRank} | W-{playerOneWorldRank})
-        </h2>
-      </div>
-      <h1 className="text-primary-yellow font-bold self-center md:self-auto mb-4 md:mb-0 md:mt-4">VS.</h1>
-      <div className="md:text-right text-center md:ml-4">
-        <h1 className="md:mt-0 px-2 text-3xl text-primary-yellow font-bold">
-          {playerTwoName.toUpperCase()}
-        </h1>
-        <h2 className="text-xl px-2 text-primary-yellow font-bold">
-          (NC-{playerTwoStateRank} | W-{playerTwoWorldRank})
-        </h2>
+        <div className="text-center mb-4">
+          <h1 className="md:mt-0 px-2 text-3xl text-primary-yellow font-bold">
+            {playerTwoName.toUpperCase()}
+          </h1>
+          <h2 className="text-xl px-2 text-primary-yellow font-bold self-end">
+            (NC-{playerTwoStateRank} | W-{playerTwoWorldRank})
+          </h2>
+        </div>
+      </section>
+      <div className="text-center md:flex md:flex-col">
+        <button className="button bg-primary-red hover:bg-secondary-blue text-white rounded font-bold w-[85%] h-12 mb-2 md:self-center">
+          Add Set
+        </button>
+      <HomeButton/>
       </div>
     </div>
   );
-  
 }
