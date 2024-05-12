@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import HomeButton from "./utils/HomeButton";
-import { fetchRankings } from "./utils/api";
+import { fetchRankings, searchPlayersByName } from "./utils/api";
 import "./index.css";
 
 export default function Rankings() {
   const [rankings, setRankings] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isVertical, setIsVertical] = useState(false);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -24,45 +24,14 @@ export default function Rankings() {
       }
     }
 
-    // On load, this function is defined and run; it checks the device orientation and sets the state.
-    const checkDeviceOrientation = () => {
-      setIsVertical(window.matchMedia("(orientation: portrait)").matches);
-    };
-
-    checkDeviceOrientation();
-
-    // This function checks for resizing the screen
-    const handleOrientationChange = () => {
-      checkDeviceOrientation();
-    };
-
-    // Add event listeners for orientation change and window resize
-    window.addEventListener("resize", handleOrientationChange);
-
     // Finally, fetch the rankings data.
     fetchRankingsData();
 
     // AbortController and event listener cleanup.
     return () => {
       ac.abort();
-      window.removeEventListener("resize", handleOrientationChange);
     };
-  }, [isVertical]);
-
-  // We all hate scrolling through long lists in horizontal mode, but the main utility
-  // of this app works far better in horizontal. So,i f the device is in horizontal orientation,
-  // this code returns an error message stating to rotate the device, as well as a home button.
-
-  if (!isVertical) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen bg-primary-blue">
-        <h2 className="text-xl text-white mb-5">
-          Please rotate your phone to view the current rankings!
-        </h2>
-        {HomeButton}
-      </div>
-    );
-  }
+  }, []);
 
   // Returns a loading div.
 
@@ -78,11 +47,26 @@ export default function Rankings() {
     return <div>Error: {error}</div>;
   }
 
+  const handleSearch = (searchQuery) => {
+    searchPlayersByName(searchQuery)
+      .then((results) => setSearchResults(results))
+      .catch((error) => {
+        console.error("Error searching players:", error);
+        setSearchResults([]);
+      });
+  };
+
+  const handleChange = (event) => {
+    handleSearch(event.target.value);
+  };
+
   // This sorts the player list by state rank, moves all players with world ranks but
   // no (null) state rank to the bottom, then maps them to list items that display
   // their names, callsigns, and ranks.
 
-  const rankingsList = rankings
+  const filteredRankings = searchResults.length > 0 ? searchResults : rankings;
+
+  const rankingsList = filteredRankings
     .sort((a, b) => {
       if (a.stateRank === null && b.stateRank === null) {
         return 0;
@@ -105,74 +89,83 @@ export default function Rankings() {
         formattedName = `${firstName} ${lastName}`;
       }
 
-      let returnStatement = null;
+      // Calculate row and column indices based on desired layout
+      const smRow = Math.floor(index / 2);
+      const mdRow = Math.floor(index / 3);
+      const lgRow = Math.floor(index / 4);
+      const col = index % 3;
 
-      // This makes sure the <hr /> is applied at the top of the first player and the bottom of the last.
-      index % 2
-        ? (returnStatement = (
-            <li key={index} className="my-2 text-center">
-              <button className="button bg-primary-red w-[85%] p-2 rounded">
-                <b className="text-2xl">{formattedName.toUpperCase()}</b>
-                <br />
-                {player.stateRank ? (
-                  <div>
-                    <span>
-                      NORTH CAROLINA RANK:{" "}
-                      <b className="text-xl">{player.stateRank}</b>
-                    </span>
-                    <br />
-                  </div>
-                ) : null}
-                {player.worldRank ? (
-                  <div>
-                    <span>
-                      WORLD RANK: <b className="text-xl">{player.worldRank}</b>
-                    </span>
-                    <br />
-                  </div>
-                ) : null}
-              </button>
-            </li>
-          ))
-        : (returnStatement = (
-            <li key={index} className="my-2 text-center">
-              <button className="button bg-secondary-blue w-[85%] p-2 rounded">
-                <b className="text-2xl">{formattedName.toUpperCase()}</b>
-                <br />
-                {player.stateRank ? (
-                  <div>
-                    <span>
-                      NORTH CAROLINA RANK:{" "}
-                      <b className="text-xl">{player.stateRank}</b>
-                    </span>
-                    <br />
-                  </div>
-                ) : null}
-                {player.worldRank ? (
-                  <div>
-                    <span>
-                      WORLD RANK: <b className="text-xl">{player.worldRank}</b>
-                    </span>
-                    <br />
-                  </div>
-                ) : null}
-              </button>
-            </li>
-          ));
+      const baseColorClass =
+        index % 2 === 0 ? "bg-primary-red" : "bg-secondary-blue";
 
-      return returnStatement;
+      const smBGColorClass =
+        smRow % 2 === 0 ? "sm:bg-primary-red" : "sm:bg-secondary-blue";
+
+      // Apply different background colors for even and odd rows
+      const mdBGColorClass =
+        mdRow % 2 === 0 ? "md:bg-primary-red" : "md:bg-secondary-blue";
+
+      const lgBGColorClass =
+        lgRow % 2 === 0 ? "lg:bg-primary-red" : "lg:bg-secondary-blue";
+
+      // Adjust the column placement based on col index
+      const colClass =
+        col === 0
+          ? "md:col-span-1"
+          : col === 1
+          ? "md:col-span-1 md:col-start-2"
+          : "md:col-span-1 md:col-start-3";
+
+      return (
+        <li
+          key={index}
+          className={`my-2 text-center md:col-span-1 sm:h-56 md:h-64 ${baseColorClass} ${smBGColorClass} ${mdBGColorClass} ${lgBGColorClass} ${colClass} shadow-xl`}
+        >
+          {player.stateRank ? (
+            <div className="p-2 sm:pt-4">
+              <b className="text-3xl underline">NC-{player.stateRank}</b>
+            </div>
+          ) : null}
+          <button className="button w-[85%] p-2 rounded ">
+            <b className="text-2xl">{formattedName.toUpperCase()}</b>
+            {player.worldRank ? (
+              <div>
+                <b className="text-xl">(W-{player.worldRank})</b>
+              </div>
+            ) : null}
+          </button>
+        </li>
+      );
     });
 
-  // The following return only appears if the screen is vertical.
   return (
-    <section className="flex flex-col min-h-screen bg-primary-blue font-custom flex-grow">
-      <h1 className="text-4xl font-bold text-center text-white m-6">
+    <section className="bg-primary-blue min-h-screen font-custom">
+      <h1 className="text-4xl font-bold text-center text-white p-6">
         Current Rankings
       </h1>
       <div className="text-center">{<HomeButton />}</div>
 
-      <div className="flex justify-center mx-6 p-2">
-        <ul className="text-white">{rankingsList}</ul>
+      <div className="mx-auto mt-3 w-[40%]">
+        <label htmlFor="player_name" className="hidden text-white">
+          Player Name
+        </label>
+        <input
+          required
+          id="player_name"
+          type="text"
+          name="player_name"
+          placeholder={"Search for a Player"}
+          onChange={handleChange} // Call handleChange on input change
+          className="form-input text-center px-1 mb-2 w-full h-8"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4 mx-6 p-2">
+        {rankingsList.map((item, index) => (
+          <ul key={index} className={`text-white sm:col-span-1`}>
+            {item}
+          </ul>
+        ))}
       </div>
       <div className="text-center">{<HomeButton />}</div>
     </section>
