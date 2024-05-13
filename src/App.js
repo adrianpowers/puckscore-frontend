@@ -3,6 +3,7 @@ import { Route, Routes, useParams } from "react-router-dom";
 import Home from "./Home.js";
 import NewMatch from "./NewMatch/NewMatch.js";
 import MatchDetails from "./MatchDetails/MatchDetails.js";
+import SetDetails from "./MatchDetails/SetDetails.js";
 import Matches from "./Matches.js";
 import Rankings from "./Rankings.js";
 import "./index.css";
@@ -17,7 +18,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="newmatch" element={<NewMatch />} />
       <Route path="matches" element={<Matches />} />
-      <Route path="matches/id/:matchId" element={<MatchDetails />} />
+      <Route path="matches/:matchId" element={<MatchDetails />} />
 
       <Route path="rankings" element={<Rankings />} />
     </Routes>

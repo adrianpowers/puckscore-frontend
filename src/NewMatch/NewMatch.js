@@ -29,7 +29,6 @@ export default function NewMatch() {
   const [formData, setFormData] = useState({ ...initialFormState });
   const [playerOneSearchResults, setPlayerOneSearchResults] = useState([]);
   const [playerTwoSearchResults, setPlayerTwoSearchResults] = useState([]);
-  // const [errors, setErrors] = useState([]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -62,7 +61,7 @@ export default function NewMatch() {
     isPlayerOne
   ) => {
     // Create a function to update the formData state based on the current state
-    setFormData(prevFormData => {
+    setFormData((prevFormData) => {
       // Create a new object to update formData
       const updatedFormData = { ...prevFormData };
       // Update the formData based on the isPlayerOne flag
@@ -83,7 +82,6 @@ export default function NewMatch() {
       return updatedFormData;
     });
   };
-  
 
   const searchPlayers = (searchQuery, setSearchResults) => {
     searchPlayersByName(searchQuery)
@@ -100,9 +98,9 @@ export default function NewMatch() {
     try {
       const matchData = await createMatch(formData);
       const matchId = matchData._id;
-      navigate(`/matches/id/${matchId}`);
+      navigate(`/matches/${matchId}`);
     } catch (error) {
-      // Handle error
+      console.error("Error creating match:", error);
     }
   };
 

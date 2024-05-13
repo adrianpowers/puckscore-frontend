@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchMatchDetailsById, findPlayerById } from "../utils/api";
-import HomeButton from "../utils/HomeButton.js"; // Importing the HomeButton component using relative path
+import { fetchMatchDetailsById, findPlayerById, createSet } from "../utils/api";
+import HomeButton from "../utils/HomeButton.js";
+import SetDetails from "./SetDetails.js";
 import "../index.css";
 
 export default function MatchDetails() {
@@ -13,6 +14,7 @@ export default function MatchDetails() {
   const [playerTwoStateRank, setPlayerTwoStateRank] = useState(0);
   const [playerOneWorldRank, setPlayerOneWorldRank] = useState(0);
   const [playerTwoWorldRank, setPlayerTwoWorldRank] = useState(0);
+  const [sets, setSets] = useState([]);
   const { matchId } = useParams();
 
   useEffect(() => {
@@ -20,6 +22,7 @@ export default function MatchDetails() {
       try {
         const matchDetails = await fetchMatchDetailsById(matchId);
         setMatch(matchDetails);
+        if (matchDetails) setSets(matchDetails.sets);
         let fetchedPlayers = [];
         for (let player of matchDetails.players) {
           const fetchedPlayer = await findPlayerById(player);
@@ -31,7 +34,6 @@ export default function MatchDetails() {
       }
     };
     fetchData();
-
   }, [matchId]);
 
   useEffect(() => {
@@ -59,7 +61,6 @@ export default function MatchDetails() {
         setPlayerTwoStateRank(players[1].stateRank);
         setPlayerOneWorldRank(players[0].worldRank);
         setPlayerTwoWorldRank(players[1].worldRank);
-
       } catch (err) {
         console.error("Error fetching player details:", err);
       }
@@ -69,6 +70,15 @@ export default function MatchDetails() {
   if (!match) {
     return <div>Loading...</div>;
   }
+
+  const handleAddSet = async (matchId) => {
+    try {
+      let newSet = await createSet(matchId);
+      setSets([...sets, newSet]);
+    } catch (error) {
+      console.error("Error adding set:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col md:justify-center md:p-4 h-screen bg-primary-blue">
@@ -96,11 +106,27 @@ export default function MatchDetails() {
           </h2>
         </div>
       </section>
+      <section id="sets">
+        {sets.map((set, index) => {
+          return (
+            <SetDetails
+              key={index}
+              matchId={matchId}
+              setId={set}
+              playerOne={playerOneName.split(" ")[0]}
+              playerTwo={playerTwoName.split(" ")[0]}
+            />
+          );
+        })}
+      </section>
       <div className="text-center md:flex md:flex-col">
-        <button className="button bg-primary-red hover:bg-secondary-blue text-white rounded font-bold w-[85%] h-12 mb-2 md:self-center">
+        <button
+          className="button bg-primary-red hover:bg-secondary-blue text-white rounded font-bold w-[85%] h-12 mb-2 md:self-center"
+          onClick={() => handleAddSet(matchId)}
+        >
           Add Set
         </button>
-      <HomeButton/>
+        <HomeButton />
       </div>
     </div>
   );

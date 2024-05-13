@@ -71,7 +71,6 @@ export async function findPlayerById(id) {
 }
 
 export async function createMatch(formData) {
-  const totalSets = formData.totalSets; 
   try {
     // Fetch playerOne and playerTwo player IDs
     const playerOneId = await getPlayerId(formData, formData.playerOne_name);
@@ -82,10 +81,40 @@ export async function createMatch(formData) {
     formData.playerTwo_id = playerTwoId;
 
     // Fetch player objects for playerOne and playerTwo players
-    const [playerOne, playerTwo] = await Promise.all([
+    let [playerOne, playerTwo] = await Promise.all([
       findPlayerById(playerOneId),
       findPlayerById(playerTwoId),
     ]);
+
+    // The following two statements are to make sure the proper player is player one.
+    // The player with the highest USAA/World Rank should be player one, so if they are inputted as player two,
+    // they will be switched to first.
+    // If both players are USAA-unranked, the same applies, but for state ranks.
+
+    if (playerOne.worldRank === 0 && playerTwo.worldRank === 0) {
+      if (
+        (playerTwo.stateRank < playerOne.stateRank &&
+          playerTwo.stateRank > 0) ||
+        playerOne.stateRank === 0
+      ) {
+        let temp = playerOne;
+        playerOne = playerTwo;
+        playerTwo = temp;
+      }
+    }
+
+    // Switch players based on world ranks, if necessary
+    if (playerOne.worldRank > 0 && playerTwo.worldRank > 0) {
+      if (
+        (playerTwo.worldRank < playerOne.worldRank &&
+          playerTwo.worldRank > 0) ||
+        playerOne.worldRank === 0
+      ) {
+        let temp = playerOne;
+        playerOne = playerTwo;
+        playerTwo = temp;
+      }
+    }
 
     const matchData = {
       ...formData, // Include other formData fields
@@ -98,9 +127,9 @@ export async function createMatch(formData) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({...matchData, totalSets} ), // Send matchData in the POST request body
+      body: JSON.stringify({ ...matchData }), // Send matchData in the POST request body
     });
-    
+
     return response; // Return the response data
   } catch (error) {
     console.error("Error creating match:", error);
@@ -117,10 +146,6 @@ async function getPlayerId(formData, name) {
       return players[0]._id;
     } else if (players.length > 1) {
       for (let player of players) {
-        console.log(
-          player.stateRank === formData.playerOne_state_rank ||
-            player.stateRank === formData.playerTwo_state_rank
-        );
         if (
           (player.stateRank === formData.playerOne_state_rank ||
             player.stateRank === formData.playerTwo_state_rank) &&
@@ -145,12 +170,66 @@ export async function fetchMatches(signal) {
   return data;
 }
 
-export async function fetchMatchDetailsById(id) {
+export async function fetchMatchDetailsById(matchId) {
   try {
-    const response = await fetchJson(`${API_BASE_URL}/matches/id/${id}`);
+    const response = await fetchJson(`${API_BASE_URL}/matches/${matchId}`, {
+      headers,
+      method: "GET",
+    });
     return response;
   } catch (error) {
     console.error("Error searching matches by id:", error);
     throw error;
+  }
+}
+
+export async function createSet(matchId) {
+  try {
+    const response = await fetchJson(`${API_BASE_URL}/matches/${matchId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        games: [],
+        winner: null,
+      }),
+    });
+    return response;
+  } catch (error) {
+    console.error("Error creating set:", error);
+  }
+}
+
+export async function createGame({
+  matchId,
+  setId,
+  playerOne,
+  playerTwo,
+  playerOneScore,
+  playerTwoScore,
+  winner,
+}) {
+  try {
+    console.log("matchId:", matchId, "setId:", setId);
+    const response = await fetchJson(
+      `${API_BASE_URL}/matches/${matchId}/sets/${setId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerOne: playerOne,
+          playerTwo: playerTwo,
+          playerOneScore: playerOneScore,
+          playerTwoScore: playerTwoScore,
+          winner: winner,
+        }),
+      }
+    );
+    return response;
+  } catch (err) {
+    console.error("Error creating game:", err);
   }
 }
