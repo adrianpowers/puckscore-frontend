@@ -92,6 +92,7 @@ export async function createMatch(formData) {
     // If both players are USAA-unranked, the same applies, but for state ranks.
 
     if (playerOne.worldRank === 0 && playerTwo.worldRank === 0) {
+      console.log(playerOne.stateRank, playerTwo.stateRank)
       if (
         (playerTwo.stateRank < playerOne.stateRank &&
           playerTwo.stateRank > 0) ||
@@ -104,7 +105,7 @@ export async function createMatch(formData) {
     }
 
     // Switch players based on world ranks, if necessary
-    if (playerOne.worldRank > 0 && playerTwo.worldRank > 0) {
+    if (playerTwo.worldRank > 0 && playerOne.worldRank >= 0) {
       if (
         (playerTwo.worldRank < playerOne.worldRank &&
           playerTwo.worldRank > 0) ||
@@ -201,35 +202,22 @@ export async function createSet(matchId) {
   }
 }
 
-export async function createGame({
-  matchId,
-  setId,
-  playerOne,
-  playerTwo,
-  playerOneScore,
-  playerTwoScore,
-  winner,
-}) {
+export async function createGame(newGame) {
   try {
-    console.log("matchId:", matchId, "setId:", setId);
     const response = await fetchJson(
-      `${API_BASE_URL}/matches/${matchId}/sets/${setId}`,
+      `${API_BASE_URL}/matches/${newGame.matchId}/sets/${newGame.setId._id}`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          playerOne: playerOne,
-          playerTwo: playerTwo,
-          playerOneScore: playerOneScore,
-          playerTwoScore: playerTwoScore,
-          winner: winner,
-        }),
+        body: JSON.stringify(newGame),
       }
     );
     return response;
   } catch (err) {
-    console.error("Error creating game:", err);
+    console.error('Error creating game:', err);
+    throw err;
   }
 }
+

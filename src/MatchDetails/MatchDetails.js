@@ -115,6 +115,7 @@ export default function MatchDetails() {
               setId={set}
               playerOne={playerOneName.split(" ")[0]}
               playerTwo={playerTwoName.split(" ")[0]}
+              setNumber={index+1}
             />
           );
         })}

@@ -1,41 +1,44 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import GameDetails from "./GameDetails";
-import { createGame } from "../utils/api.js"
 
-export default function SetDetails({ matchId, setId, setNumber, playerOne, playerTwo }) {
+export default function SetDetails({
+  matchId,
+  setId,
+  setNumber,
+  playerOne,
+  playerTwo,
+}) {
   const [games, setGames] = useState([]);
   const [winner, setWinner] = useState(null);
+  const [newGame, setNewGame] = useState({
+    playerOne: playerOne,
+    playerTwo: playerTwo,
+    playerOneScore: 0,
+    playerTwoScore: 0,
+    gameWinner: null,
+  });
 
-  const handleAddGame = async () => {
-    try {
-      const newGame = {
-        matchId: matchId,
-        setId: setId,
-        playerOne: playerOne,
-        playerTwo: playerTwo,
-        playerOneScore: 0,
-        playerTwoScore: 0,
-        gameWinner: null,
-      }
-      console.log(setId);
-      await createGame(newGame);
-      setGames([...games, newGame])
-    } catch (error) {
-      console.error("Error Creating Game:", error);
-    }
+  const handleAddGame = () => {
+    const gameToAdd = {
+      ...newGame,
+      playerOne: playerOne,
+      playerTwo: playerTwo,
+    };
+    setGames([...games, gameToAdd]);
+    setNewGame({
+      playerOne: playerOne,
+      playerTwo: playerTwo,
+      playerOneScore: 0,
+      playerTwoScore: 0,
+      gameWinner: null,
+    });
   };
 
   const handleGameComplete = (index, winner) => {
-    console.log("handleGameComplete - Index:", index, "Winner:", winner);
-  
     const updatedGames = [...games];
     updatedGames[index].gameWinner = winner;
-    console.log("handleGameComplete - Updated Games:", updatedGames);
-  
     setGames(updatedGames);
-    console.log("handleGameComplete - Games State after update:", games);
-  }
+  };
 
   return (
     <section className="flex flex-col">
@@ -46,10 +49,23 @@ export default function SetDetails({ matchId, setId, setNumber, playerOne, playe
 
       {/* Rendering Games */}
       {games.map((game, index) => (
-        <GameDetails key={index} playerOne={playerOne} playerTwo={playerTwo} game={game} onComplete={(winner) => handleGameComplete(index, winner)}/>
+        <GameDetails
+          key={index}
+          game={game}
+          matchId={matchId}
+          setId={setId}
+          playerOne={game.playerOne}
+          playerTwo={game.playerTwo}
+          onComplete={(winner) => handleGameComplete(index, winner)}
+        />
       ))}
 
-      <button className="bg-primary-red text-white px-5 py-2 mx-6 mb-5" onClick={handleAddGame}>Add Game</button>
+      <button
+        className="bg-primary-red text-white px-5 py-2 mx-6 mb-5"
+        onClick={handleAddGame}
+      >
+        Add Game
+      </button>
     </section>
   );
 }
