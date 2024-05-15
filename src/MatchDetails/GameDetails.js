@@ -11,9 +11,8 @@ export default function GameDetails({
 }) {
   const [playerOneScore, setPlayerOneScore] = useState(game.playerOneScore);
   const [playerTwoScore, setPlayerTwoScore] = useState(game.playerTwoScore);
-  const [gameWinner, setGameWinner] = useState("");
-  const [winnerConfirmationVisible, setWinnerConfirmationVisible] =
-    useState(true);
+  const [gameWinner, setGameWinner] = useState(null);
+  const [winnerConfirmationVisible, setWinnerConfirmationVisible] = useState(true);
 
   useEffect(() => {
     setPlayerOneScore(game.playerOneScore);
@@ -37,9 +36,10 @@ export default function GameDetails({
   };
 
   const handleConfirmWinner = async (player) => {
-    setGameWinner(player);
+    const playerId = player._id;
+    setGameWinner(playerId);
     setWinnerConfirmationVisible(false);
-    onComplete(player);
+    onComplete(playerId);
 
     try {
       await createGame({
@@ -49,57 +49,62 @@ export default function GameDetails({
         playerTwo: game.playerTwo,
         playerOneScore: playerOneScore,
         playerTwoScore: playerTwoScore,
-        gameWinner: player, // Pass directly from function parameter
+        gameWinner: playerId,
       });
-      console.log("Game created successfully - congrats, ", player, "!")
+      console.log("Game created successfully - congrats, ", playerId, "!")
     } catch (err) {
       console.error("Error creating game:", err);
     }
   };
+  
+  if (!playerOne || !playerTwo) {
+    return "Loading..."; // Or any other loading indicator
+  }
 
-  return (
-    <div>
-      {winnerConfirmationVisible && (
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h3 className="font-bold">{playerOne}</h3>
-            <button onClick={() => handleScoreChange("playerOne", "increase")}>
-              +
-            </button>
-            {winnerConfirmationVisible && <span>{playerOneScore}</span>}
-            <button onClick={() => handleScoreChange("playerOne", "decrease")}>
-              -
-            </button>
-          </div>
-          <div>
-            <h3 className="font-bold">{playerTwo}</h3>
-            <button onClick={() => handleScoreChange("playerTwo", "increase")}>
-              +
-            </button>
-            {winnerConfirmationVisible && <span>{playerTwoScore}</span>}
-            <button onClick={() => handleScoreChange("playerTwo", "decrease")}>
-              -
-            </button>
-          </div>
+  if (game.gameWinner) {
+    // Render the completed game
+    return (
+      <p>
+        {game.gameWinner === playerOne._id
+          ? `${playerOneScore} - ${playerTwoScore} ${playerOne.name.firstName}`
+          : `${playerTwoScore} - ${playerOneScore} ${playerTwo.name.firstName}`}
+      </p>
+    );
+  } else {
+    // Render the counters
+    return (
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h3 className="font-bold">{playerOne.name.firstName}</h3>
+          <button onClick={() => handleScoreChange("playerOne", "increase")}>
+            +
+          </button>
+          <span>{playerOneScore}</span>
+          <button onClick={() => handleScoreChange("playerOne", "decrease")}>
+            -
+          </button>
         </div>
-      )}
-      {winnerConfirmationVisible && playerOneScore === 7 && (
-        <button onClick={() => handleConfirmWinner(game.playerOne)}>
-          Confirm {game.playerOne} as winner?
-        </button>
-      )}
-      {winnerConfirmationVisible && playerTwoScore === 7 && (
-        <button onClick={() => handleConfirmWinner(game.playerTwo)}>
-          Confirm {game.playerTwo} as winner?
-        </button>
-      )}
-      {!winnerConfirmationVisible && gameWinner && (
-        <p>
-          {gameWinner === playerOne
-            ? `${playerOneScore} - ${playerTwoScore} ${gameWinner}`
-            : `${playerTwoScore} - ${playerOneScore} ${gameWinner}`}
-        </p>
-      )}
-    </div>
-  );
+        <div>
+          <h3 className="font-bold">{playerTwo.name.firstName}</h3>
+          <button onClick={() => handleScoreChange("playerTwo", "increase")}>
+            +
+          </button>
+          <span>{playerTwoScore}</span>
+          <button onClick={() => handleScoreChange("playerTwo", "decrease")}>
+            -
+          </button>
+        </div>
+        {(winnerConfirmationVisible && playerOneScore === 7) && (
+          <button onClick={() => handleConfirmWinner(playerOne)}>
+            Confirm {playerOne.name.firstName} as winner?
+          </button>
+        )}
+        {(winnerConfirmationVisible && playerTwoScore === 7) && (
+          <button onClick={() => handleConfirmWinner(playerTwo)}>
+            Confirm {playerTwo.name.firstName} as winner?
+          </button>
+        )}
+      </div>
+    );
+  }
 }

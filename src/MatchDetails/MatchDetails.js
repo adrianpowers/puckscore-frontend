@@ -74,7 +74,7 @@ export default function MatchDetails() {
   const handleAddSet = async (matchId) => {
     try {
       let newSet = await createSet(matchId);
-      setSets([...sets, newSet]);
+      setSets(prevSets => [...prevSets, newSet]);
     } catch (error) {
       console.error("Error adding set:", error);
     }
@@ -113,8 +113,8 @@ export default function MatchDetails() {
               key={index}
               matchId={matchId}
               setId={set._id}
-              playerOne={playerOneName.split(" ")[0]}
-              playerTwo={playerTwoName.split(" ")[0]}
+              playerOne={players[0]}
+              playerTwo={players[1]}
               setNumber={index+1}
             />
           );

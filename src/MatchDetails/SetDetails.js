@@ -10,20 +10,12 @@ export default function SetDetails({
   playerTwo,
 }) {
   const [games, setGames] = useState([]);
-  const [mappedGames, setMappedGames] = useState([]);
-  const [newGame, setNewGame] = useState({
-    playerOne: playerOne,
-    playerTwo: playerTwo,
-    playerOneScore: 0,
-    playerTwoScore: 0,
-    gameWinner: null,
-  });
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const fetchedGames = await listGames(matchId, setId);
-        setGames(fetchedGames);
+        setGames(fetchedGames || []);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
@@ -32,36 +24,15 @@ export default function SetDetails({
     fetchGames();
   }, [matchId, setId]);
 
-  useEffect(() => {
-    setMappedGames(
-      games.map((game, index) => (
-        <GameDetails
-          key={index}
-          game={game}
-          matchId={matchId}
-          setId={setId}
-          playerOne={game.playerOne}
-          playerTwo={game.playerTwo}
-          onComplete={(winner) => handleGameComplete(index, winner)}
-        />
-      ))
-    );
-  }, [games, matchId, setId]);
-
   const handleAddGame = () => {
-    const gameToAdd = {
-      ...newGame,
-      playerOne: playerOne,
-      playerTwo: playerTwo,
-    };
-    setGames([...games, gameToAdd]);
-    setNewGame({
+    const newGame = {
       playerOne: playerOne,
       playerTwo: playerTwo,
       playerOneScore: 0,
       playerTwoScore: 0,
       gameWinner: null,
-    });
+    };
+    setGames([...games, newGame]);
   };
 
   const handleGameComplete = (index, winner) => {
@@ -72,12 +43,25 @@ export default function SetDetails({
 
   return (
     <section className="flex flex-col">
-      {/* Header with Set Number, conditionally renders winner upon completion*/}
       <div className="bg-secondary-blue text-center text-white text-2xl p-5 mx-6">
         <h1>SET {setNumber}</h1>
       </div>
 
-      {mappedGames}
+      {games.length === 0 ? (
+        <></>
+      ) : (
+        games.map((game, index) => (
+          <GameDetails
+            key={index}
+            game={game}
+            matchId={matchId}
+            setId={setId}
+            playerOne={playerOne}
+            playerTwo={playerTwo}
+            onComplete={(winner) => handleGameComplete(index, winner)}
+          />
+        ))
+      )}
 
       <button
         className="bg-primary-red text-white px-5 py-2 mx-6 mb-5"

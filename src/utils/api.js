@@ -92,7 +92,6 @@ export async function createMatch(formData) {
     // If both players are USAA-unranked, the same applies, but for state ranks.
 
     if (playerOne.worldRank === 0 && playerTwo.worldRank === 0) {
-      console.log(playerOne.stateRank, playerTwo.stateRank)
       if (
         (playerTwo.stateRank < playerOne.stateRank &&
           playerTwo.stateRank > 0) ||
@@ -196,7 +195,7 @@ export async function createSet(matchId) {
         winner: null,
       }),
     });
-    return response;
+    return response.set;
   } catch (error) {
     console.error("Error creating set:", error);
   }
@@ -214,6 +213,7 @@ export async function createGame(newGame) {
         body: JSON.stringify(newGame),
       }
     );
+    console.log(response);
     return response;
   } catch (err) {
     console.error('Error creating game:', err);
