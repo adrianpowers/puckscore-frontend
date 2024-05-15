@@ -175,7 +175,7 @@ export default function Matches() {
         index === resolvedInProgressMatches.length - 1 ? (
           index % 2 ? (
             <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue">
+              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue">
                 {`${firstPlayerName} vs. ${secondPlayerName}`}
                 <br />
                 <span className="text-sm text-primary-yellow">{date}</span>
@@ -183,7 +183,7 @@ export default function Matches() {
             </Link>
           ) : (
             <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
+              <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
                 {`${firstPlayerName} vs. ${secondPlayerName}`}
                 <br />
                 <span className="text-sm text-primary-yellow">{date}</span>
@@ -192,7 +192,7 @@ export default function Matches() {
           )
         ) : index % 2 ? (
           <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue mb-2">
+            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue mb-2">
               {`${firstPlayerName} vs. ${secondPlayerName}`}
               <br />
               <span className="text-sm text-primary-yellow">{date}</span>
@@ -200,7 +200,7 @@ export default function Matches() {
           </Link>
         ) : (
           <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
+            <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
               {`${firstPlayerName} vs. ${secondPlayerName}`}
               <br />
               <span className="text-sm text-primary-yellow">{date}</span>
@@ -217,7 +217,7 @@ export default function Matches() {
         index === resolvedPendingMatches.length - 1 ? (
           index % 2 ? (
             <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue">
+              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue">
                 {`${firstPlayerName} vs. ${secondPlayerName}`}
                 <br />
                 <span className="text-sm text-primary-yellow">{date}</span>
@@ -225,7 +225,7 @@ export default function Matches() {
             </Link>
           ) : (
             <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
+              <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
                 {`${firstPlayerName} vs. ${secondPlayerName}`}
                 <br />
                 <span className="text-sm text-primary-yellow">{date}</span>
@@ -234,7 +234,7 @@ export default function Matches() {
           )
         ) : index % 2 ? (
           <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue mb-2">
+            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue mb-2">
               {`${firstPlayerName} vs. ${secondPlayerName}`}
               <br />
               <span className="text-sm text-primary-yellow">{date}</span>
@@ -242,7 +242,7 @@ export default function Matches() {
           </Link>
         ) : (
           <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
+            <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
               {`${firstPlayerName} vs. ${secondPlayerName}`}
               <br />
               <span className="text-sm text-primary-yellow">{date}</span>
@@ -260,7 +260,7 @@ export default function Matches() {
         index === resolvedCompletedMatches.length - 1 ? (
           index % 2 ? (
             <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue">
+              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue">
                 {`${firstPlayerName} vs. ${secondPlayerName}`}
                 <br />
                 <span className="text-sm text-primary-yellow">{date}</span>
@@ -268,7 +268,7 @@ export default function Matches() {
             </Link>
           ) : (
             <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
+              <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
                 {`${firstPlayerName} vs. ${secondPlayerName}`}
                 <br />
                 <span className="text-sm text-primary-yellow">{date}</span>
@@ -277,7 +277,7 @@ export default function Matches() {
           )
         ) : index % 2 ? (
           <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-secondary-blue mb-2">
+            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue mb-2">
               {`${firstPlayerName} vs. ${secondPlayerName}`}
               <br />
               <span className="text-sm text-primary-yellow">{date}</span>
@@ -285,7 +285,7 @@ export default function Matches() {
           </Link>
         ) : (
           <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-secondary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
+            <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
               {`${firstPlayerName} vs. ${secondPlayerName}`}
               <br />
               <span className="text-sm text-primary-yellow">{date}</span>
@@ -297,7 +297,7 @@ export default function Matches() {
 
   // Render component content
   return (
-    <section className="flex flex-col justify-center min-h-screen bg-primary-blue font-custom flex-grow">
+    <section className="flex flex-col justify-center min-h-screen bg-secondary-blue font-custom flex-grow">
       <div className="text-center mt-6">{<HomeButton />}</div>
       <h1 className="text-3xl font-bold text-center text-white m-6">
         Matches in Progress

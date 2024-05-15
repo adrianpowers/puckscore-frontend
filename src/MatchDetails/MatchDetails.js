@@ -68,20 +68,24 @@ export default function MatchDetails() {
   }, [players]);
 
   if (!match) {
-    return <div>Loading...</div>;
+    return (
+      <div className="bg-secondary-blue h-screen text-white text-4xl text-bold text-center p-48">
+        Loading...
+      </div>
+    );
   }
 
   const handleAddSet = async (matchId) => {
     try {
       let newSet = await createSet(matchId);
-      setSets(prevSets => [...prevSets, newSet]);
+      setSets((prevSets) => [...prevSets, newSet]);
     } catch (error) {
       console.error("Error adding set:", error);
     }
   };
 
   return (
-    <div className="flex flex-col md:justify-center md:p-4 h-screen bg-primary-blue">
+    <div className="flex flex-col md:justify-center md:p-4 h-screen bg-secondary-blue">
       <section
         id="playerInfo"
         className="sm:flex sm:flex-row sm:justify-between sm:p-4"
@@ -115,14 +119,14 @@ export default function MatchDetails() {
               setId={set._id}
               playerOne={players[0]}
               playerTwo={players[1]}
-              setNumber={index+1}
+              setNumber={index + 1}
             />
           );
         })}
       </section>
       <div className="text-center md:flex md:flex-col">
         <button
-          className="button bg-primary-red hover:bg-secondary-blue text-white rounded font-bold w-[85%] h-12 mb-2 md:self-center"
+          className="button bg-primary-red hover:bg-secondary-blue text-white rounded font-bold w-[90%] lg:w-[70%] self-center px-4 py-3 mb-2"
           onClick={() => handleAddSet(matchId)}
         >
           Add Set

@@ -221,7 +221,7 @@ export default function NewMatchForm({
           {/* Custom styled radio buttons */}
           <div
             className={`rounded-md py-4  bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 1 && "bg-primary-yellow text-black"
+              selectedSets === 1 && "bg-primary-blue text-black"
             }`}
             onClick={() => handleSetSelection(1)}
           >
@@ -233,7 +233,7 @@ export default function NewMatchForm({
           </div>
           <div
             className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 2 && "bg-primary-yellow text-black"
+              selectedSets === 2 && "bg-primary-blue text-black"
             }`}
             onClick={() => handleSetSelection(2)}
           >
@@ -245,7 +245,7 @@ export default function NewMatchForm({
           </div>
           <div
             className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 3 && "bg-primary-yellow text-black"
+              selectedSets === 3 && "bg-primary-blue text-black"
             }`}
             onClick={() => handleSetSelection(3)}
           >
@@ -257,7 +257,7 @@ export default function NewMatchForm({
           </div>
           <div
             className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 4 && "bg-primary-yellow text-black"
+              selectedSets === 4 && "bg-primary-blue text-black"
             }`}
             onClick={() => handleSetSelection(4)}
           >

@@ -42,13 +42,15 @@ export default function SetDetails({
   };
 
   return (
-    <section className="flex flex-col">
-      <div className="bg-secondary-blue text-center text-white text-2xl p-5 mx-6">
-        <h1>SET {setNumber}</h1>
+    <section className="flex flex-col p-6">
+      <div className="bg-primary-blue text-center text-3xl font-bold text-white w-full lg:w-[75%] self-center px-6 py-4">
+        <h1>
+          {`SET ${setNumber}`}
+        </h1>
       </div>
 
       {games.length === 0 ? (
-        <></>
+        <p className=""></p>
       ) : (
         games.map((game, index) => (
           <GameDetails
@@ -64,7 +66,7 @@ export default function SetDetails({
       )}
 
       <button
-        className="bg-primary-red text-white px-5 py-2 mx-6 mb-5"
+        className="bg-primary-blue text-white font-bold w-full lg:w-[75%] self-center py-2 px-6 border-t-2 border-secondary-blue"
         onClick={handleAddGame}
       >
         Add Game

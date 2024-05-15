@@ -12,7 +12,8 @@ export default function GameDetails({
   const [playerOneScore, setPlayerOneScore] = useState(game.playerOneScore);
   const [playerTwoScore, setPlayerTwoScore] = useState(game.playerTwoScore);
   const [gameWinner, setGameWinner] = useState(null);
-  const [winnerConfirmationVisible, setWinnerConfirmationVisible] = useState(true);
+  const [winnerConfirmationVisible, setWinnerConfirmationVisible] =
+    useState(true);
 
   useEffect(() => {
     setPlayerOneScore(game.playerOneScore);
@@ -51,12 +52,12 @@ export default function GameDetails({
         playerTwoScore: playerTwoScore,
         gameWinner: playerId,
       });
-      console.log("Game created successfully - congrats, ", playerId, "!")
+      console.log("Game created successfully - congrats, ", playerId, "!");
     } catch (err) {
       console.error("Error creating game:", err);
     }
   };
-  
+
   if (!playerOne || !playerTwo) {
     return "Loading..."; // Or any other loading indicator
   }
@@ -64,7 +65,7 @@ export default function GameDetails({
   if (game.gameWinner) {
     // Render the completed game
     return (
-      <p>
+      <p className="bg-primary-blue text-white text-xl text-center border-t-2 border-secondary-blue">
         {game.gameWinner === playerOne._id
           ? `${playerOneScore} - ${playerTwoScore} ${playerOne.name.firstName}`
           : `${playerTwoScore} - ${playerOneScore} ${playerTwo.name.firstName}`}
@@ -73,34 +74,66 @@ export default function GameDetails({
   } else {
     // Render the counters
     return (
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h3 className="font-bold">{playerOne.name.firstName}</h3>
-          <button onClick={() => handleScoreChange("playerOne", "increase")}>
-            +
-          </button>
-          <span>{playerOneScore}</span>
-          <button onClick={() => handleScoreChange("playerOne", "decrease")}>
-            -
-          </button>
+      <div className="w-full self-center text-center lg:w-[75%]">
+        <div className="flex flex-col md:flex-row">
+          <div
+            id="playerOneCounter"
+            className="bg-primary-yellow w-full md:w-1/2 border-t-2 border-secondary-blue"
+          >
+            <h3 className="font-bold text-2xl mt-2">
+              {playerOne.name.firstName}
+            </h3>
+            <div className="flex justify-center p-2">
+              <button
+                className="font-bold text-2xl border-secondary-blue border-2 p-4 md:p-6 w-[30%] md:w-auto"
+                onClick={() => handleScoreChange("playerOne", "increase")}
+              >
+                +
+              </button>
+              <span className="font-bold text-2xl w-[40%] md:w-auto pt-4 md:pt-6 md:mx-6">
+                {playerOneScore}
+              </span>
+              <button
+                className="font-bold text-2xl border-secondary-blue border-2 p-4 md:p-6 w-[30%] md:w-auto"
+                onClick={() => handleScoreChange("playerOne", "decrease")}
+              >
+                -
+              </button>
+            </div>
+          </div>
+          <div
+            id="playerTwoCounter"
+            className="bg-primary-red w-full md:w-1/2 border-t-2 border-secondary-blue"
+          >
+            <h3 className="font-bold text-2xl mt-2">
+              {playerTwo.name.firstName}
+            </h3>
+            <div className="flex justify-center p-2">
+              <button
+                className="font-bold text-2xl border-secondary-blue border-2 p-4 md:p-6 w-[30%] md:w-auto"
+                onClick={() => handleScoreChange("playerTwo", "increase")}
+              >
+                +
+              </button>
+              <span className="font-bold text-2xl w-[40%] md:w-auto pt-4 md:pt-6 md:mx-6">
+                {playerTwoScore}
+              </span>
+              <button
+                className="font-bold text-2xl border-secondary-blue border-2 p-4 md:p-6 w-[30%] md:w-auto"
+                onClick={() => handleScoreChange("playerTwo", "decrease")}
+              >
+                -
+              </button>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3 className="font-bold">{playerTwo.name.firstName}</h3>
-          <button onClick={() => handleScoreChange("playerTwo", "increase")}>
-            +
-          </button>
-          <span>{playerTwoScore}</span>
-          <button onClick={() => handleScoreChange("playerTwo", "decrease")}>
-            -
-          </button>
-        </div>
-        {(winnerConfirmationVisible && playerOneScore === 7) && (
-          <button onClick={() => handleConfirmWinner(playerOne)}>
+        {winnerConfirmationVisible && playerOneScore === 7 && (
+          <button className="w-full p-2 bg-primary-yellow text-black font-bold text-xl text-center border-t-2 border-secondary-blue" onClick={() => handleConfirmWinner(playerOne)}>
             Confirm {playerOne.name.firstName} as winner?
           </button>
         )}
-        {(winnerConfirmationVisible && playerTwoScore === 7) && (
-          <button onClick={() => handleConfirmWinner(playerTwo)}>
+        {winnerConfirmationVisible && playerTwoScore === 7 && (
+          <button className="w-full p-2 bg-primary-yellow text-black font-bold text-xl text-center border-t-2 border-secondary-blue" onClick={() => handleConfirmWinner(playerTwo)}>
             Confirm {playerTwo.name.firstName} as winner?
           </button>
         )}

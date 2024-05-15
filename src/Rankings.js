@@ -37,7 +37,7 @@ export default function Rankings() {
 
   if (loading) {
     return (
-      <div className="bg-primary-blue font-custom flex-grow">Loading...</div>
+      <div className="bg-secondary-blue font-custom flex-grow text-white">Loading...</div>
     );
   }
 
@@ -96,17 +96,17 @@ export default function Rankings() {
       const col = index % 3;
 
       const baseColorClass =
-        index % 2 === 0 ? "bg-primary-red" : "bg-secondary-blue";
+        index % 2 === 0 ? "bg-primary-red" : "bg-primary-blue";
 
       const smBGColorClass =
-        smRow % 2 === 0 ? "sm:bg-primary-red" : "sm:bg-secondary-blue";
+        smRow % 2 === 0 ? "sm:bg-primary-red" : "sm:bg-primary-blue";
 
       // Apply different background colors for even and odd rows
       const mdBGColorClass =
-        mdRow % 2 === 0 ? "md:bg-primary-red" : "md:bg-secondary-blue";
+        mdRow % 2 === 0 ? "md:bg-primary-red" : "md:bg-primary-blue";
 
       const lgBGColorClass =
-        lgRow % 2 === 0 ? "lg:bg-primary-red" : "lg:bg-secondary-blue";
+        lgRow % 2 === 0 ? "lg:bg-primary-red" : "lg:bg-primary-blue";
 
       // Adjust the column placement based on col index
       const colClass =
@@ -139,7 +139,7 @@ export default function Rankings() {
     });
 
   return (
-    <section className="bg-primary-blue min-h-screen font-custom">
+    <section className="bg-secondary-blue min-h-screen font-custom">
       <h1 className="text-4xl font-bold text-center text-white p-6">
         Current Rankings
       </h1>

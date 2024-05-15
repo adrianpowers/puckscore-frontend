@@ -105,7 +105,7 @@ export default function NewMatch() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-primary-blue">
+    <div className="flex justify-center items-center h-screen bg-secondary-blue">
       <div className="w-full max-w-lg">
         <h1 className="text-3xl text-white font-bold mb-10 text-center">
           New Match
