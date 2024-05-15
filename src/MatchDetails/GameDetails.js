@@ -52,7 +52,7 @@ export default function GameDetails({
         playerTwoScore: playerTwoScore,
         gameWinner: player,
       });
-      console.log("Game created successfully - congrats, ", player, "!")
+      console.log("Game created successfully - congrats, ", gameWinner, "!")
     } catch (err) {
       console.error("Error creating game:", err);
     }

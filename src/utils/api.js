@@ -203,9 +203,10 @@ export async function createSet(matchId) {
 }
 
 export async function createGame(newGame) {
+  console.log("Game created in API:", newGame)
   try {
     const response = await fetchJson(
-      `${API_BASE_URL}/matches/${newGame.matchId}/sets/${newGame.setId._id}`,
+      `${API_BASE_URL}/matches/${newGame.matchId}/sets/${newGame.setId}`,
       {
         method: 'POST',
         headers: {
@@ -221,3 +222,8 @@ export async function createGame(newGame) {
   }
 }
 
+export async function listGames(matchId, setId) {
+  const url = `${API_BASE_URL}/matches/${matchId}/sets/${setId}`;
+  let data = await fetchJson(url, { headers, method: "GET" }, []);
+  return data.games;
+}

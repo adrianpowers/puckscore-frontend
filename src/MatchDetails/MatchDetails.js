@@ -112,7 +112,7 @@ export default function MatchDetails() {
             <SetDetails
               key={index}
               matchId={matchId}
-              setId={set}
+              setId={set._id}
               playerOne={playerOneName.split(" ")[0]}
               playerTwo={playerTwoName.split(" ")[0]}
               setNumber={index+1}

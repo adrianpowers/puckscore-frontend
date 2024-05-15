@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { listGames } from "../utils/api.js"
 import GameDetails from "./GameDetails";
 
 export default function SetDetails({
@@ -9,7 +10,7 @@ export default function SetDetails({
   playerTwo,
 }) {
   const [games, setGames] = useState([]);
-  const [winner, setWinner] = useState(null);
+  const [mappedGames, setMappedGames] = useState([])
   const [newGame, setNewGame] = useState({
     playerOne: playerOne,
     playerTwo: playerTwo,
@@ -17,6 +18,33 @@ export default function SetDetails({
     playerTwoScore: 0,
     gameWinner: null,
   });
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const fetchedGames = await listGames(matchId, setId);
+        setGames(fetchedGames);
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    };
+
+    fetchGames();
+  }, [matchId, setId]);
+
+  useEffect(() => {
+    setMappedGames(games.map((game, index) => (
+      <GameDetails
+        key={index}
+        game={game}
+        matchId={matchId}
+        setId={setId}
+        playerOne={game.playerOne}
+        playerTwo={game.playerTwo}
+        onComplete={(winner) => handleGameComplete(index, winner)}
+      />
+    )));
+  }, [games, matchId, setId]);
 
   const handleAddGame = () => {
     const gameToAdd = {
@@ -47,18 +75,7 @@ export default function SetDetails({
         <h1>SET {setNumber}</h1>
       </div>
 
-      {/* Rendering Games */}
-      {games.map((game, index) => (
-        <GameDetails
-          key={index}
-          game={game}
-          matchId={matchId}
-          setId={setId}
-          playerOne={game.playerOne}
-          playerTwo={game.playerTwo}
-          onComplete={(winner) => handleGameComplete(index, winner)}
-        />
-      ))}
+      {mappedGames}
 
       <button
         className="bg-primary-red text-white px-5 py-2 mx-6 mb-5"
