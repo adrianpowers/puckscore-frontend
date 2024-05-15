@@ -11,14 +11,13 @@ export default function GameDetails({
 }) {
   const [playerOneScore, setPlayerOneScore] = useState(game.playerOneScore);
   const [playerTwoScore, setPlayerTwoScore] = useState(game.playerTwoScore);
-  const [gameWinner, setGameWinner] = useState(game.gameWinner);
+  const [gameWinner, setGameWinner] = useState("");
   const [winnerConfirmationVisible, setWinnerConfirmationVisible] =
     useState(true);
 
   useEffect(() => {
     setPlayerOneScore(game.playerOneScore);
     setPlayerTwoScore(game.playerTwoScore);
-    setGameWinner(game.gameWinner);
   }, [game]);
 
   const handleScoreChange = (player, method) => {
@@ -50,9 +49,9 @@ export default function GameDetails({
         playerTwo: game.playerTwo,
         playerOneScore: playerOneScore,
         playerTwoScore: playerTwoScore,
-        gameWinner: player,
+        gameWinner: player, // Pass directly from function parameter
       });
-      console.log("Game created successfully - congrats, ", gameWinner, "!")
+      console.log("Game created successfully - congrats, ", player, "!")
     } catch (err) {
       console.error("Error creating game:", err);
     }

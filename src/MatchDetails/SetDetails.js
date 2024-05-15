@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { listGames } from "../utils/api.js"
+import { listGames } from "../utils/api.js";
 import GameDetails from "./GameDetails";
 
 export default function SetDetails({
@@ -10,7 +10,7 @@ export default function SetDetails({
   playerTwo,
 }) {
   const [games, setGames] = useState([]);
-  const [mappedGames, setMappedGames] = useState([])
+  const [mappedGames, setMappedGames] = useState([]);
   const [newGame, setNewGame] = useState({
     playerOne: playerOne,
     playerTwo: playerTwo,
@@ -33,17 +33,19 @@ export default function SetDetails({
   }, [matchId, setId]);
 
   useEffect(() => {
-    setMappedGames(games.map((game, index) => (
-      <GameDetails
-        key={index}
-        game={game}
-        matchId={matchId}
-        setId={setId}
-        playerOne={game.playerOne}
-        playerTwo={game.playerTwo}
-        onComplete={(winner) => handleGameComplete(index, winner)}
-      />
-    )));
+    setMappedGames(
+      games.map((game, index) => (
+        <GameDetails
+          key={index}
+          game={game}
+          matchId={matchId}
+          setId={setId}
+          playerOne={game.playerOne}
+          playerTwo={game.playerTwo}
+          onComplete={(winner) => handleGameComplete(index, winner)}
+        />
+      ))
+    );
   }, [games, matchId, setId]);
 
   const handleAddGame = () => {
