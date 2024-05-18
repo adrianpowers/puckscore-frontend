@@ -179,10 +179,7 @@ export default function NewMatchForm({
 
           <div className="flex justify-center w-full gap-x-3">
             <div>
-              <label
-                htmlFor="playerTwo_state_rank"
-                className="text-white mr-3"
-              >
+              <label htmlFor="playerTwo_state_rank" className="text-white mr-3">
                 State Rank
               </label>
               <input
@@ -218,54 +215,45 @@ export default function NewMatchForm({
           Number of Sets
         </legend>
         <div className="grid grid-cols-2 gap-3 w-[90%]">
-          {/* Custom styled radio buttons */}
           <div
-            className={`rounded-md py-4  bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 1 && "bg-primary-blue text-black"
+            className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
+              selectedSets === 1
+                ? "bg-primary-blue  text-white"
+                : "bg-primary-red text-white"
             }`}
             onClick={() => handleSetSelection(1)}
           >
-            <span
-              className={`text-white ${selectedSets === 1 && "text-black"}`}
-            >
-              1 set of 1
-            </span>
+            <span>1 set of 1</span>
           </div>
           <div
-            className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 2 && "bg-primary-blue text-black"
+            className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
+              selectedSets === 2
+                ? "bg-primary-blue text-white"
+                : "bg-primary-red text-white"
             }`}
             onClick={() => handleSetSelection(2)}
           >
-            <span
-              className={`text-white ${selectedSets === 2 && "text-black"}`}
-            >
-              2 sets of 3
-            </span>
+            <span>2 sets of 3</span>
           </div>
           <div
-            className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 3 && "bg-primary-blue text-black"
+            className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
+              selectedSets === 3
+                ? "bg-primary-blue text-white"
+                : "bg-primary-red text-white"
             }`}
             onClick={() => handleSetSelection(3)}
           >
-            <span
-              className={`text-white ${selectedSets === 3 && "text-black"}`}
-            >
-              3 sets of 5
-            </span>
+            <span>3 sets of 5</span>
           </div>
           <div
-            className={`rounded-md py-4 bg-primary-red flex justify-center items-center cursor-pointer ${
-              selectedSets === 4 && "bg-primary-blue text-black"
+            className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
+              selectedSets === 4
+                ? "bg-primary-blue text-white"
+                : "bg-primary-red text-white"
             }`}
             onClick={() => handleSetSelection(4)}
           >
-            <span
-              className={`text-white ${selectedSets === 4 && "text-black"}`}
-            >
-              4 sets of 7
-            </span>
+            <span>4 sets of 7</span>
           </div>
         </div>
       </fieldset>
@@ -273,7 +261,7 @@ export default function NewMatchForm({
       <div className="flex flex-col items-center col-span-2 mt-6 gap-y-2">
         <button
           type="submit"
-          className="bg-primary-yellow text-black text-xl font-bold py-5 w-[90%] rounded"
+          className="bg-primary-blue text-white text-xl font-bold py-5 w-[90%] rounded"
         >
           Create New Match
         </button>

@@ -96,17 +96,17 @@ export default function Rankings() {
       const col = index % 3;
 
       const baseColorClass =
-        index % 2 === 0 ? "bg-primary-red" : "bg-primary-blue";
+        index % 2 === 0 ? "bg-primary-red hover:bg-primary-blue" : "bg-primary-blue hover:bg-primary-red";
 
       const smBGColorClass =
-        smRow % 2 === 0 ? "sm:bg-primary-red" : "sm:bg-primary-blue";
+        smRow % 2 === 0 ? "sm:bg-primary-red sm:hover:bg-primary-blue" : "sm:bg-primary-blue sm:hover:bg-primary-red";
 
       // Apply different background colors for even and odd rows
       const mdBGColorClass =
-        mdRow % 2 === 0 ? "md:bg-primary-red" : "md:bg-primary-blue";
+        mdRow % 2 === 0 ? "md:bg-primary-red md:hover:bg-primary-blue" : "md:bg-primary-blue md:hover:bg-primary-red";
 
       const lgBGColorClass =
-        lgRow % 2 === 0 ? "lg:bg-primary-red" : "lg:bg-primary-blue";
+        lgRow % 2 === 0 ? "lg:bg-primary-red lg:hover:bg-primary-blue" : "lg:bg-primary-blue lg:hover:bg-primary-red";
 
       // Adjust the column placement based on col index
       const colClass =

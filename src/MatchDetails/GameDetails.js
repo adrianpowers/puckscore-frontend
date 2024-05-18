@@ -65,8 +65,8 @@ export default function GameDetails({
   if (game.gameWinner) {
     // Render the completed game
     return (
-      <p className="bg-primary-blue text-white text-xl text-center border-t-2 border-secondary-blue">
-        {game.gameWinner === playerOne._id
+      <p className="bg-primary-blue text-white text-xl text-center border-t-2 border-secondary-blue lg:w-[75%] lg:self-center ">
+        {game.gameWinner === playerOne._id 
           ? `${playerOneScore} - ${playerTwoScore} ${playerOne.name.firstName}`
           : `${playerTwoScore} - ${playerOneScore} ${playerTwo.name.firstName}`}
       </p>
@@ -128,12 +128,12 @@ export default function GameDetails({
           </div>
         </div>
         {winnerConfirmationVisible && playerOneScore === 7 && (
-          <button className="w-full p-2 bg-primary-yellow text-black font-bold text-xl text-center border-t-2 border-secondary-blue" onClick={() => handleConfirmWinner(playerOne)}>
+          <button className="w-full lg:w-[75%] p-2 bg-primary-yellow text-black font-bold text-xl text-center border-t-2 border-secondary-blue" onClick={() => handleConfirmWinner(playerOne)}>
             Confirm {playerOne.name.firstName} as winner?
           </button>
         )}
         {winnerConfirmationVisible && playerTwoScore === 7 && (
-          <button className="w-full p-2 bg-primary-yellow text-black font-bold text-xl text-center border-t-2 border-secondary-blue" onClick={() => handleConfirmWinner(playerTwo)}>
+          <button className="w-full lg:w-[75%] p-2 bg-primary-yellow text-black font-bold text-xl text-center border-t-2 border-secondary-blue" onClick={() => handleConfirmWinner(playerTwo)}>
             Confirm {playerTwo.name.firstName} as winner?
           </button>
         )}

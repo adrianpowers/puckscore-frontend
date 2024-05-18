@@ -9,17 +9,17 @@ export default function Home() {
       <div id="buttons" className="text-center mt-6">
         <div className="flex flex-col space-y-4">
           <Link to="newmatch">
-            <button className="bg-primary-red text-white text-xl rounded w-[100%] h-24 shadow-md">
+            <button className="bg-primary-red hover:bg-primary-blue text-white text-xl rounded w-[100%] h-24 shadow-md">
               <b>Create New Match</b>
             </button>
           </Link>
           <Link to="matches">
-            <button className="mt-6 bg-primary-yellow text-xl rounded w-[100%] h-16 p-4 shadow-xl">
+            <button className="mt-6 bg-primary-yellow hover:bg-primary-red hover:text-white text-xl rounded w-[100%] h-16 p-4 shadow-xl">
               View All Matches
             </button>
           </Link>
           <Link to="rankings">
-            <button className="bg-primary-red text-white text-xl rounded w-[100%] h-16 p-4 shadow-xl">
+            <button className="bg-primary-red hover:bg-primary-blue text-white text-xl rounded w-[100%] h-16 p-4 shadow-xl">
               Rankings and Player Data
             </button>
           </Link>

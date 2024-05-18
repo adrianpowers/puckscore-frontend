@@ -69,7 +69,7 @@ export default function MatchDetails() {
 
   if (!match) {
     return (
-      <div className="bg-secondary-blue h-screen text-white text-4xl text-bold text-center p-48">
+      <div className="bg-secondary-blue h-screen overflow-y-auto text-white text-4xl text-bold text-center p-48">
         Loading...
       </div>
     );
@@ -85,7 +85,7 @@ export default function MatchDetails() {
   };
 
   return (
-    <div className="flex flex-col md:justify-center md:p-4 h-screen bg-secondary-blue">
+    <div className="flex flex-col md:justify-center md:p-4 bg-secondary-blue">
       <section
         id="playerInfo"
         className="sm:flex sm:flex-row sm:justify-between sm:p-4"
