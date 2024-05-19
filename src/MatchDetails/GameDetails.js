@@ -63,7 +63,7 @@ export default function GameDetails({
   if (game.gameWinner) {
     // Render the completed game
     return (
-      <p className="bg-primary-blue text-white text-xl text-center border-t-2 border-secondary-blue lg:self-center p-1">
+      <p className="bg-primary-blue text-white text-xl text-center border-t-2 border-secondary-blue lg:self-center p-1 font-custom">
         {game.gameWinner === playerOne._id 
           ? `${playerOneScore} - ${playerTwoScore} ${playerOne.name.firstName}`
           : `${playerTwoScore} - ${playerOneScore} ${playerTwo.name.firstName}`}
@@ -73,7 +73,7 @@ export default function GameDetails({
 
     // Render the counters
     return (
-      <div className="w-full self-center text-center">
+      <div className="w-full self-center text-center font-custom">
         <div className="flex flex-col md:flex-row lg:flex-col">
           <div
             id="playerOneCounter"

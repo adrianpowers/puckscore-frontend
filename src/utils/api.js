@@ -137,6 +137,44 @@ export async function createMatch(formData) {
   }
 }
 
+export async function createSet(matchId) {
+  try {
+    const response = await fetchJson(`${API_BASE_URL}/matches/${matchId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        games: [],
+        winner: null,
+      }),
+    });
+    return response.set;
+  } catch (error) {
+    console.error("Error creating set:", error);
+  }
+}
+
+export async function createGame(newGame) {
+  try {
+    const response = await fetchJson(
+      `${API_BASE_URL}/matches/${newGame.matchId}/sets/${newGame.setId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newGame),
+      }
+    );
+    console.log(response);
+    return response;
+  } catch (err) {
+    console.error("Error creating game:", err);
+    throw err;
+  }
+}
+
 async function getPlayerId(formData, name) {
   try {
     // Search for the player by name to get the player object
@@ -183,46 +221,35 @@ export async function fetchMatchDetailsById(matchId) {
   }
 }
 
-export async function createSet(matchId) {
-  try {
-    const response = await fetchJson(`${API_BASE_URL}/matches/${matchId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        games: [],
-        winner: null,
-      }),
-    });
-    return response.set;
-  } catch (error) {
-    console.error("Error creating set:", error);
-  }
-}
-
-export async function createGame(newGame) {
-  try {
-    const response = await fetchJson(
-      `${API_BASE_URL}/matches/${newGame.matchId}/sets/${newGame.setId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newGame),
-      }
-    );
-    console.log(response);
-    return response;
-  } catch (err) {
-    console.error('Error creating game:', err);
-    throw err;
-  }
-}
-
 export async function listGames(matchId, setId) {
   const url = `${API_BASE_URL}/matches/${matchId}/sets/${setId}`;
   let data = await fetchJson(url, { headers, method: "GET" }, []);
   return data.games;
+}
+
+export async function searchMatchesByPlayerName(playerName) {
+  try {
+    // Fetch all players with the given name
+    const players = await searchPlayersByName(playerName);
+    
+    // If no players found, return an empty array
+    if (players.length === 0) {
+      return [];
+    }
+
+    // Create an array to store matches
+    const allMatches = [];
+
+    // Fetch matches for each player
+    for (const player of players) {
+      const matches = await fetchJson(`${API_BASE_URL}/matches/players/${player._id}`);
+      allMatches.push(...matches);
+    }
+
+    // Sort matches chronologically by date
+    return allMatches.sort((a, b) => new Date(a.date) - new Date(b.date));
+  } catch (error) {
+    console.error("Error searching matches:", error);
+    throw error;
+  }
 }

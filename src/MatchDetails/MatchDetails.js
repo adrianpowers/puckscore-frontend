@@ -103,7 +103,7 @@ export default function MatchDetails() {
   const gridColumnsClass = getGridColumnsClass(sets.length);
 
   return (
-    <div className="flex flex-col min-h-screen sm:justify-center sm:p-4 bg-gradient-to-r md:bg-gradient-to-b from-secondary-blue to-tertiary-blue">
+    <div className="flex flex-col min-h-screen sm:justify-center sm:p-4 bg-gradient-to-r md:bg-gradient-to-b from-secondary-blue to-tertiary-blue font-custom">
       <section
         id="playerInfo"
         className="sm:flex sm:flex-row sm:justify-between sm:p-4 w-[90%] lg:w-[75%] xl:w-[60%] self-center"

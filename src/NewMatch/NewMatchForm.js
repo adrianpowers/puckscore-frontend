@@ -61,7 +61,7 @@ export default function NewMatchForm({
             value={newMatch.playerOne_name}
             onChange={handleChange}
             onFocus={() => setPlayerOneDropdownVisible(true)}
-            className="form-input text-center px-1 mb-2 w-full"
+            className="form-input text-center p-1 mb-2 w-full"
           />
           {playerOneDropdownVisible && (
             <div
@@ -142,7 +142,7 @@ export default function NewMatchForm({
             value={newMatch.playerTwo_name}
             onChange={handleChange}
             onFocus={() => setPlayerTwoDropdownVisible(true)}
-            className="form-input text-center px-1 mb-2 w-full"
+            className="form-input text-center p-1 mb-2 w-full"
           />
           {playerTwoDropdownVisible && (
             <div
@@ -219,7 +219,7 @@ export default function NewMatchForm({
             className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
               selectedSets === 1
                 ? "bg-primary-blue  text-white"
-                : "bg-primary-red text-white"
+                : "bg-primary-red hover:bg-primary-yellow text-white hover:text-black transition ease-in-out duration-200"
             }`}
             onClick={() => handleSetSelection(1)}
           >
@@ -229,7 +229,7 @@ export default function NewMatchForm({
             className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
               selectedSets === 2
                 ? "bg-primary-blue text-white"
-                : "bg-primary-red text-white"
+                : "bg-primary-red hover:bg-primary-yellow text-white hover:text-black transition ease-in-out duration-200"
             }`}
             onClick={() => handleSetSelection(2)}
           >
@@ -239,7 +239,7 @@ export default function NewMatchForm({
             className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
               selectedSets === 3
                 ? "bg-primary-blue text-white"
-                : "bg-primary-red text-white"
+                : "bg-primary-red hover:bg-primary-yellow text-white hover:text-black transition ease-in-out duration-200"
             }`}
             onClick={() => handleSetSelection(3)}
           >
@@ -249,7 +249,7 @@ export default function NewMatchForm({
             className={`rounded-md py-4 flex justify-center items-center cursor-pointer ${
               selectedSets === 4
                 ? "bg-primary-blue text-white"
-                : "bg-primary-red text-white"
+                : "bg-primary-red hover:bg-primary-yellow text-white hover:text-black transition ease-in-out duration-200"
             }`}
             onClick={() => handleSetSelection(4)}
           >
@@ -261,7 +261,7 @@ export default function NewMatchForm({
       <div className="flex flex-col items-center col-span-2 mt-6 gap-y-2">
         <button
           type="submit"
-          className="bg-primary-blue text-white text-xl font-bold py-5 w-[90%] rounded"
+          className="bg-primary-blue hover:bg-primary-red text-white text-xl font-bold py-5 w-[90%] rounded transition ease-in-out duration-200"
         >
           Create New Match
         </button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { listGames } from "../utils/api.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import GameDetails from "./GameDetails";
 
 export default function SetDetails({
@@ -96,7 +96,7 @@ export default function SetDetails({
   };
 
   return (
-    <section className="flex flex-col px-6 lg:px-2 py-1 sm:p-2">
+    <section className="flex flex-col px-6 lg:px-2 py-1 sm:p-2 font-custom">
       <div
         className="bg-primary-blue text-center text-3xl font-bold text-white w-full self-center px-3 py-4 flex justify-between items-center cursor-pointer lg:flex-col lg:justify-center"
         onClick={toggleCollapse}
@@ -112,14 +112,16 @@ export default function SetDetails({
           )}
         </h1>
         <FontAwesomeIcon
-          icon={collapsed ? faChevronDown : faChevronUp}
-          className="px-4"
+          icon={faChevronRight}
+          className={`transform duration-200 ease-in-out ${
+            collapsed ? "pt-2" : "rotate-90"
+          }`}
         />
       </div>
 
       <div
         ref={contentRef}
-        className={`overflow-hidden transition-[max-height] duration-10000 ease-in-out ${
+        className={`overflow-hidden transition-[max-height] duration-200 ease-in-out ${
           collapsed ? "max-h-0" : "max-h-[1000px]"
         }`}
       >

@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Home.js";
+import PlayerProfile from "./PlayerProfile.js";
 import NewMatch from "./NewMatch/NewMatch.js";
 import MatchDetails from "./MatchDetails/MatchDetails.js";
 import Matches from "./Matches.js";
@@ -18,8 +19,8 @@ function App() {
       <Route path="newmatch" element={<NewMatch />} />
       <Route path="matches" element={<Matches />} />
       <Route path="matches/:matchId" element={<MatchDetails />} />
-
       <Route path="rankings" element={<Rankings />} />
+      <Route path="players/:playerId" element={<PlayerProfile />} />
     </Routes>
   );
 }
