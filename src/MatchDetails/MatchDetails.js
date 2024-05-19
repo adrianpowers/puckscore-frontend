@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { fetchMatchDetailsById, findPlayerById, createSet } from "../utils/api";
 import HomeButton from "../utils/HomeButton.js";
 import SetDetails from "./SetDetails.js";
@@ -14,6 +14,7 @@ export default function MatchDetails() {
   const [playerTwoStateRank, setPlayerTwoStateRank] = useState(0);
   const [playerOneWorldRank, setPlayerOneWorldRank] = useState(0);
   const [playerTwoWorldRank, setPlayerTwoWorldRank] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
   const [sets, setSets] = useState([]);
   const { matchId } = useParams();
 
@@ -69,7 +70,7 @@ export default function MatchDetails() {
 
   if (!match) {
     return (
-      <div className="bg-secondary-blue h-screen overflow-y-auto text-white text-4xl text-bold text-center p-48">
+      <div className="bg-gradient-to-r md:bg-gradient-to-b from-secondary-blue to-tertiary-blue h-screen overflow-y-auto text-white text-4xl text-bold text-center p-48">
         Loading...
       </div>
     );
@@ -77,18 +78,35 @@ export default function MatchDetails() {
 
   const handleAddSet = async (matchId) => {
     try {
+      if (sets.length === 7) {
+        throw new Error("Maximum sets reached!");
+      }
       let newSet = await createSet(matchId);
       setSets((prevSets) => [...prevSets, newSet]);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error adding set:", error);
+      setErrorMessage(error.message);
     }
   };
 
+  const getGridColumnsClass = (numSets) => {
+    if (numSets <= 1) return "lg:grid-cols-1";
+    if (numSets === 2) return "lg:grid-cols-2";
+    if (numSets === 3) return "lg:grid-cols-3";
+    if (numSets === 4) return "lg:grid-cols-4";
+    if (numSets === 5) return "lg:grid-cols-5";
+    if (numSets === 6) return "lg:grid-cols-6";
+    if (numSets === 7) return "lg:grid-cols-7";
+  };
+
+  const gridColumnsClass = getGridColumnsClass(sets.length);
+
   return (
-    <div className="flex flex-col md:justify-center md:p-4 bg-secondary-blue">
+    <div className="flex flex-col min-h-screen sm:justify-center sm:p-4 bg-gradient-to-r md:bg-gradient-to-b from-secondary-blue to-tertiary-blue">
       <section
         id="playerInfo"
-        className="sm:flex sm:flex-row sm:justify-between sm:p-4"
+        className="sm:flex sm:flex-row sm:justify-between sm:p-4 w-[90%] lg:w-[75%] xl:w-[60%] self-center"
       >
         <div className="text-center mb-4 px-2">
           <h1 className="mt-8 sm:mt-0 text-3xl text-primary-yellow font-bold">
@@ -98,11 +116,11 @@ export default function MatchDetails() {
             (NC-{playerOneStateRank} | W-{playerOneWorldRank})
           </h2>
         </div>
-        <h1 className="text-primary-yellow font-bold text-center self-center mb-4">
+        <h1 className="text-primary-yellow font-bold text-center self-center mb-4 px-4">
           VS.
         </h1>
         <div className="text-center mb-4">
-          <h1 className="md:mt-0 px-2 text-3xl text-primary-yellow font-bold">
+          <h1 className="sm:mt-0 px-2 text-3xl text-primary-yellow font-bold">
             {playerTwoName.toUpperCase()}
           </h1>
           <h2 className="text-xl px-2 text-primary-yellow font-bold self-end">
@@ -110,23 +128,44 @@ export default function MatchDetails() {
           </h2>
         </div>
       </section>
-      <section id="sets">
+
+      <section
+        id="sets"
+        className={`sm:grid sm:grid-cols-2 lg:grid-flow-col ${gridColumnsClass}`}
+      >
         {sets.map((set, index) => {
+          const isLastOddSet =
+            sets.length % 2 !== 0 && index === sets.length - 1;
           return (
-            <SetDetails
+            <div
               key={index}
-              matchId={matchId}
-              setId={set._id}
-              playerOne={players[0]}
-              playerTwo={players[1]}
-              setNumber={index + 1}
-            />
+              className={`flex justify-center w-full ${
+                isLastOddSet ? "sm:col-span-2 lg:col-span-1" : ""
+              }`}
+            >
+              <div className="w-full">
+                <SetDetails
+                  matchId={matchId}
+                  setId={set._id}
+                  playerOne={players[0]}
+                  playerTwo={players[1]}
+                  setNumber={index + 1}
+                />
+              </div>
+            </div>
           );
         })}
       </section>
-      <div className="text-center md:flex md:flex-col">
+
+      {errorMessage && (
+        <div className="text-center text-primary-yellow font-bold my-2">
+          {errorMessage}
+        </div>
+      )}
+
+      <div className="text-center md:flex-col">
         <button
-          className="button bg-primary-red hover:bg-secondary-blue text-white rounded font-bold w-[90%] lg:w-[70%] self-center px-4 py-3 mb-2"
+          className="button bg-primary-red hover:bg-primary-blue text-white rounded font-bold w-[90%] lg:w-[70%] self-center px-4 py-3 my-2"
           onClick={() => handleAddSet(matchId)}
         >
           Add Set

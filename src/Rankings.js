@@ -37,11 +37,9 @@ export default function Rankings() {
 
   if (loading) {
     return (
-      <div className="bg-secondary-blue font-custom flex-grow text-white">Loading...</div>
+      <div className="bg-gradient-to-r from-secondary-blue to-tertiary-blue font-custom flex-grow text-white">Loading...</div>
     );
   }
-
-  // Returns an error div.
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -139,7 +137,7 @@ export default function Rankings() {
     });
 
   return (
-    <section className="bg-secondary-blue min-h-screen font-custom">
+    <section className="bg-gradient-to-r from-secondary-blue to-tertiary-blue min-h-screen font-custom">
       <h1 className="text-4xl font-bold text-center text-white p-6">
         Current Rankings
       </h1>

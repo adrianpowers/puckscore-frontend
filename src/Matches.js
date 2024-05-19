@@ -1,4 +1,3 @@
-// Import necessary modules and components
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HomeButton from "./utils/HomeButton";
@@ -7,257 +6,78 @@ import "./index.css";
 
 // Define the Matches component
 export default function Matches() {
-  // State variables to store matches data, resolved matches, and error
-  const [matchesInProgress, setMatchesInProgress] = useState([]);
-  const [resolvedInProgressMatches, setResolvedInProgressMatches] = useState(
-    []
-  );
-  const [pendingMatches, setPendingMatches] = useState([]);
-  const [resolvedPendingMatches, setResolvedPendingMatches] = useState([]);
-  const [completedMatches, setCompletedMatches] = useState([]);
-  const [resolvedCompletedMatches, setResolvedCompletedMatches] = useState([]);
+  // State variables to store matches data and error
+  const [matches, setMatches] = useState([]);
+  const [resolvedMatches, setResolvedMatches] = useState([]);
+  const [error, setError] = useState(null);
 
   // Fetch matches data when the component mounts
   useEffect(() => {
-    // Abort controller to handle fetch cancellation
     const ac = new AbortController();
 
-    // Function to fetch matches data
     async function fetchMatchesData() {
       try {
-        // Fetch matches data
         const data = await fetchMatches(ac.signal);
-        // Filter in-progress and completed matches
-        const inProgress = data.filter((match) => match.inProgress);
-        const completed = data.filter(
-          (match) => !match.inProgress & !match.pendingApproval
-        );
-        const pending = data.filter(
-          (match) => !match.inProgress & match.pendingApproval
-        );
-        // Set state with in-progress and completed matches
-        setMatchesInProgress(inProgress);
-        setPendingMatches(pending);
-        setCompletedMatches(completed);
+        setMatches(data);
       } catch (err) {
-        // Set error state if fetch fails
         console.error("Error fetching matches:", err);
+        setError("Error fetching matches.");
       }
     }
 
-    // Call fetchMatchesData function
     fetchMatchesData();
 
-    // Cleanup function to abort fetch if component unmounts
     return () => {
       ac.abort();
     };
   }, []);
 
-  // Fetch player information for each match in progress
+  // Fetch player information for each match
   useEffect(() => {
-    // Map through in-progress matches and fetch player information
-    const fetchInProgressPlayerData = async () => {
-      const promises = matchesInProgress.map(async (match) => {
-        // Fetch player information for both players in the match
+    const fetchPlayerData = async () => {
+      const promises = matches.map(async (match) => {
         const firstPlayerPromise = findPlayerById(match.players[0]);
         const secondPlayerPromise = findPlayerById(match.players[1]);
-        // Wait for both player promises to resolve
+
         const [firstPlayer, secondPlayer] = await Promise.all([
           firstPlayerPromise,
           secondPlayerPromise,
         ]);
 
-        // Format player names
         const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
         const secondPlayerName = `${secondPlayer.name.firstName} ${secondPlayer.name.lastName}`;
 
-        // Return formatted match data
         return {
           matchId: match._id,
           firstPlayerName,
           secondPlayerName,
           date: new Date(match.date).toLocaleDateString(),
+          timestamp: new Date(match.date).getTime(),
         };
       });
 
-      // Wait for all promises to resolve
-      const resolvedInProgressMatchesData = await Promise.all(promises);
-      // Set state with resolved matches data
-      setResolvedInProgressMatches(resolvedInProgressMatchesData);
+      const resolvedMatchesData = await Promise.all(promises);
+      setResolvedMatches(resolvedMatchesData.sort((a, b) => b.timestamp - a.timestamp));
     };
 
-    // Call fetchInProgressPlayerData function
-    fetchInProgressPlayerData();
-  }, [matchesInProgress]);
+    fetchPlayerData();
+  }, [matches]);
 
-  // Fetch player information for each completed match
-  useEffect(() => {
-    // Map through completed matches and fetch player information
-    const fetchCompletedPlayerData = async () => {
-      const promises = completedMatches.map(async (match) => {
-        // Fetch player information for both players in the match
-        const firstPlayerPromise = findPlayerById(match.players[0]);
-        const secondPlayerPromise = findPlayerById(match.players[1]);
+  if (error) {
+    return <div className="bg-gradient-to-r from-secondary-blue to-tertiary-blue font-custom flex-grow text-white">{error}</div>;
+  }
 
-        // Wait for both player promises to resolve
-        const [firstPlayer, secondPlayer] = await Promise.all([
-          firstPlayerPromise,
-          secondPlayerPromise,
-        ]);
-
-        // Format player names
-        const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
-        const secondPlayerName = `${secondPlayer.name.firstName} ${secondPlayer.name.lastName}`;
-
-        // Return formatted match data
-        return {
-          matchId: match._id,
-          firstPlayerName,
-          secondPlayerName,
-          date: new Date(match.date).toLocaleDateString(),
-        };
-      });
-
-      // Wait for all promises to resolve
-      const resolvedCompletedMatchesData = await Promise.all(promises);
-      // Set state with resolved matches data
-      setResolvedCompletedMatches(resolvedCompletedMatchesData);
-    };
-
-    // Call fetchCompletedPlayerData function
-    fetchCompletedPlayerData();
-  }, [completedMatches]);
-
-  // Fetch player information for each completed match
-  useEffect(() => {
-    // Map through pending matches and fetch player information
-    const fetchPendingPlayerData = async () => {
-      const promises = pendingMatches.map(async (match) => {
-        // Fetch player information for both players in the match
-        const firstPlayerPromise = findPlayerById(match.players[0]);
-        const secondPlayerPromise = findPlayerById(match.players[1]);
-
-        // Wait for both player promises to resolve
-        const [firstPlayer, secondPlayer] = await Promise.all([
-          firstPlayerPromise,
-          secondPlayerPromise,
-        ]);
-
-        // Format player names
-        const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
-        const secondPlayerName = `${secondPlayer.name.firstName} ${secondPlayer.name.lastName}`;
-
-        // Return formatted match data
-        return {
-          matchId: match._id,
-          firstPlayerName,
-          secondPlayerName,
-          date: new Date(match.date).toLocaleDateString(),
-        };
-      });
-
-      // Wait for all promises to resolve
-      const resolvedPendingMatchesData = await Promise.all(promises);
-      // Set state with resolved matches data
-      setResolvedPendingMatches(resolvedPendingMatchesData);
-    };
-
-    // Call fetchPendingPlayerData function
-    fetchPendingPlayerData();
-  }, [completedMatches]);
-
-  // Render matches in-progress list
-  const renderInProgressMatches = () => {
-    // Map through resolved in-progress matches and create JSX elements
-    return resolvedInProgressMatches.map(
-      ({ matchId, firstPlayerName, secondPlayerName, date }, index) =>
-        index === resolvedInProgressMatches.length - 1 ? (
-          index % 2 ? (
-            <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue">
-                {`${firstPlayerName} vs. ${secondPlayerName}`}
-                <br />
-                <span className="text-sm text-primary-yellow">{date}</span>
-              </button>
-            </Link>
-          ) : (
-            <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
-                {`${firstPlayerName} vs. ${secondPlayerName}`}
-                <br />
-                <span className="text-sm text-primary-yellow">{date}</span>
-              </button>
-            </Link>
-          )
-        ) : index % 2 ? (
-          <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue mb-2">
-              {`${firstPlayerName} vs. ${secondPlayerName}`}
-              <br />
-              <span className="text-sm text-primary-yellow">{date}</span>
-            </button>
-          </Link>
-        ) : (
-          <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
-              {`${firstPlayerName} vs. ${secondPlayerName}`}
-              <br />
-              <span className="text-sm text-primary-yellow">{date}</span>
-            </button>
-          </Link>
-        )
+  if (!resolvedMatches.length) {
+    return (
+      <div className="bg-gradient-to-r from-secondary-blue to-tertiary-blue font-custom flex-grow text-white">Loading...</div>
     );
-  };
+  }
 
-  const renderPendingMatches = () => {
-    // Map through matches that are pending approval before rank changes
-    return resolvedPendingMatches.map(
+  // Render matches list
+  const renderMatches = () => {
+    return resolvedMatches.map(
       ({ matchId, firstPlayerName, secondPlayerName, date }, index) =>
-        index === resolvedPendingMatches.length - 1 ? (
-          index % 2 ? (
-            <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue">
-                {`${firstPlayerName} vs. ${secondPlayerName}`}
-                <br />
-                <span className="text-sm text-primary-yellow">{date}</span>
-              </button>
-            </Link>
-          ) : (
-            <Link to={`/matches/${matchId}`} key={matchId}>
-              <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red">
-                {`${firstPlayerName} vs. ${secondPlayerName}`}
-                <br />
-                <span className="text-sm text-primary-yellow">{date}</span>
-              </button>
-            </Link>
-          )
-        ) : index % 2 ? (
-          <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue mb-2">
-              {`${firstPlayerName} vs. ${secondPlayerName}`}
-              <br />
-              <span className="text-sm text-primary-yellow">{date}</span>
-            </button>
-          </Link>
-        ) : (
-          <Link to={`/matches/${matchId}`} key={matchId}>
-            <button className="bg-primary-blue text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-red mb-2">
-              {`${firstPlayerName} vs. ${secondPlayerName}`}
-              <br />
-              <span className="text-sm text-primary-yellow">{date}</span>
-            </button>
-          </Link>
-        )
-    );
-  };
-
-  // Render completed matches list
-  const renderCompletedMatches = () => {
-    // Map through resolved completed matches and create JSX elements
-    return resolvedCompletedMatches.map(
-      ({ matchId, firstPlayerName, secondPlayerName, date }, index) =>
-        index === resolvedCompletedMatches.length - 1 ? (
+        index === resolvedMatches.length - 1 ? (
           index % 2 ? (
             <Link to={`/matches/${matchId}`} key={matchId}>
               <button className="bg-primary-red text-white font-bold px-5 py-3 rounded-md w-[85%] hover:bg-primary-blue">
@@ -297,25 +117,11 @@ export default function Matches() {
 
   // Render component content
   return (
-    <section className="flex flex-col justify-center min-h-screen bg-secondary-blue font-custom flex-grow">
+    <section className="flex flex-col justify-center min-h-screen bg-gradient-to-r from-secondary-blue to-tertiary-blue font-custom flex-grow">
       <div className="text-center mt-6">{<HomeButton />}</div>
-      <h1 className="text-3xl font-bold text-center text-white m-6">
-        Matches in Progress
-      </h1>
+      <h1 className="text-3xl font-bold text-center text-white m-6">All Matches</h1>
       <div className="text-center mx-6 p-2">
-        <ul className="text-white items-center">{renderInProgressMatches()}</ul>
-      </div>
-      <h1 className="text-3xl font-bold text-center text-white m-6">
-        Completed Matches
-      </h1>
-      <div className="text-center mx-6 p-2">
-        <ul className="text-white items-center">{renderCompletedMatches()}</ul>
-      </div>
-      <h1 className="text-3xl font-bold text-center text-white m-6">
-        Pending Admin Approval
-      </h1>
-      <div className="text-center mx-6 p-2">
-        <ul className="text-white items-center">{renderPendingMatches()}</ul>
+        <ul className="text-white items-center">{renderMatches()}</ul>
       </div>
       <div className="mt-6 text-center">{<HomeButton />}</div>
     </section>

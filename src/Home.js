@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <section className="flex flex-col justify-center items-center w-full h-screen bg-secondary-blue font-custom">
+    <section className="flex flex-col justify-center items-center w-full h-screen bg-gradient-to-b from-secondary-blue to-tertiary-blue font-custom">
       <h1 className="text-4xl font-bold text-white text-center m-6">
         Welcome to <br />North Carolina <br />Puckscore!
       </h1>
