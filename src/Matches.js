@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HomeButton from "./utils/HomeButton";
-import { fetchMatches, findPlayerById } from "./utils/api";
+import { fetchMatches } from "./utils/api";
 import "./index.css";
 
 // Define the Matches component
@@ -36,33 +36,38 @@ export default function Matches() {
   useEffect(() => {
     const fetchPlayerData = async () => {
       const promises = matches.map(async (match) => {
-        const firstPlayerPromise = findPlayerById(match.players[0]);
-        const secondPlayerPromise = findPlayerById(match.players[1]);
+        try {
+          const firstPlayer = await match.players[0];
+          const secondPlayer = await match.players[1];
 
-        const [firstPlayer, secondPlayer] = await Promise.all([
-          firstPlayerPromise,
-          secondPlayerPromise,
-        ]);
+          const firstPlayerName = `${firstPlayer.firstName} ${firstPlayer.lastName}`;
+          const secondPlayerName = `${secondPlayer.firstName} ${secondPlayer.lastName}`;
 
-        const firstPlayerName = `${firstPlayer.name.firstName} ${firstPlayer.name.lastName}`;
-        const secondPlayerName = `${secondPlayer.name.firstName} ${secondPlayer.name.lastName}`;
-
-        return {
-          matchId: match._id,
-          firstPlayerName,
-          secondPlayerName,
-          date: new Date(match.date).toLocaleDateString(),
-          timestamp: new Date(match.date).getTime(),
-        };
+          return {
+            matchId: match._id,
+            firstPlayerName,
+            secondPlayerName,
+            date: new Date(match.date).toLocaleDateString(),
+            timestamp: new Date(match.date).getTime(),
+          };
+        } catch (err) {
+          console.error(`Error fetching player data for match ${match._id}:`, err);
+          // Return null or some placeholder data if a player is not found
+          return null;
+        }
       });
 
       const resolvedMatchesData = await Promise.all(promises);
+      // Filter out any null entries due to missing players
+      const validMatches = resolvedMatchesData.filter(match => match !== null);
       setResolvedMatches(
-        resolvedMatchesData.sort((a, b) => b.timestamp - a.timestamp)
+        validMatches.sort((a, b) => b.timestamp - a.timestamp)
       );
     };
 
-    fetchPlayerData();
+    if (matches.length) {
+      fetchPlayerData();
+    }
   }, [matches]);
 
   if (error) {

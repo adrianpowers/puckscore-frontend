@@ -231,7 +231,7 @@ export async function searchMatchesByPlayerName(playerName) {
   try {
     // Fetch all players with the given name
     const players = await searchPlayersByName(playerName);
-    
+
     // If no players found, return an empty array
     if (players.length === 0) {
       return [];
@@ -242,7 +242,9 @@ export async function searchMatchesByPlayerName(playerName) {
 
     // Fetch matches for each player
     for (const player of players) {
-      const matches = await fetchJson(`${API_BASE_URL}/matches/players/${player._id}`);
+      const matches = await fetchJson(
+        `${API_BASE_URL}/matches/players/${player._id}`
+      );
       allMatches.push(...matches);
     }
 
@@ -251,5 +253,47 @@ export async function searchMatchesByPlayerName(playerName) {
   } catch (error) {
     console.error("Error searching matches:", error);
     throw error;
+  }
+}
+
+export async function uploadProfilePicture(playerId, formData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/upload/${playerId}`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      // Try to parse the error response only if the content type is JSON
+      const contentType = response.headers.get("content-type");
+      let errorMessage = "Failed to upload profile picture";
+
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } else {
+        console.error("Received non-JSON response", await response.text());
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    // Assume the response contains the URL of the uploaded image
+    return await response.json();
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    throw error;
+  }
+}
+
+
+export async function fetchProfilePicture(filename) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/files${filename}`, {
+      method: "GET"
+    })
+    return response;
+  } catch (error) {
+    console.error("Error fetching profile picture:", error);
   }
 }

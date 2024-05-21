@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchMatchDetailsById, findPlayerById, createSet } from "../utils/api";
+import { fetchMatchDetailsById, createSet } from "../utils/api";
 import HomeButton from "../utils/HomeButton.js";
 import SetDetails from "./SetDetails.js";
 import "../index.css";
@@ -24,12 +24,7 @@ export default function MatchDetails() {
         const matchDetails = await fetchMatchDetailsById(matchId);
         setMatch(matchDetails);
         if (matchDetails) setSets(matchDetails.sets);
-        let fetchedPlayers = [];
-        for (let player of matchDetails.players) {
-          const fetchedPlayer = await findPlayerById(player);
-          fetchedPlayers.push(fetchedPlayer);
-        }
-        setPlayers(fetchedPlayers);
+        setPlayers([matchDetails.players[0], matchDetails.players[1]]);
       } catch (err) {
         console.error("Error fetching match details:", err);
       }
@@ -45,15 +40,15 @@ export default function MatchDetails() {
         let nameTwo = "";
 
         if (players[0]) {
-          nameOne = players[0].name.callsign
-            ? `${players[0].name.firstName} "${players[0].name.callsign}" ${players[0].name.lastName}`
-            : `${players[0].name.firstName} ${players[0].name.lastName}`;
+          nameOne = players[0].callsign
+            ? `${players[0].firstName} "${players[0].callsign}" ${players[0].lastName}`
+            : `${players[0].firstName} ${players[0].lastName}`;
         }
 
         if (players[1]) {
-          nameTwo = players[1].name.callsign
-            ? `${players[1].name.firstName} "${players[1].name.callsign}" ${players[1].name.lastName}`
-            : `${players[1].name.firstName} ${players[1].name.lastName}`;
+          nameTwo = players[1].callsign
+            ? `${players[1].firstName} "${players[1].callsign}" ${players[1].lastName}`
+            : `${players[1].firstName} ${players[1].lastName}`;
         }
 
         setPlayerOneName(nameOne);

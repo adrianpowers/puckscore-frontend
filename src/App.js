@@ -19,7 +19,7 @@ function App() {
       <Route path="newmatch" element={<NewMatch />} />
       <Route path="matches" element={<Matches />} />
       <Route path="matches/:matchId" element={<MatchDetails />} />
-      <Route path="rankings" element={<Rankings />} />
+      <Route path="players" element={<Rankings />} />
       <Route path="players/:playerId" element={<PlayerProfile />} />
     </Routes>
   );

@@ -33,7 +33,7 @@ export default function Rankings() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-r from-secondary-blue to-tertiary-blue font-custom flex-grow text-white">
+      <div className="h-screen bg-gradient-to-r from-secondary-blue to-tertiary-blue font-custom flex-grow text-white text-center">
         Loading...
       </div>
     );

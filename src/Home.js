@@ -18,7 +18,7 @@ export default function Home() {
               View All Matches
             </button>
           </Link>
-          <Link to="rankings">
+          <Link to="players">
             <button className="bg-primary-red hover:bg-primary-blue text-white text-xl rounded w-[100%] h-16 p-4 shadow-xl transition ease-in-out duration-200">
               Rankings and Player Data
             </button>
